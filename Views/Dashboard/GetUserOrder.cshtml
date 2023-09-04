@@ -1,0 +1,74 @@
+﻿@model ATTP.ViewModel.UserOrderViewModel
+@using ATTP.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+
+@if (Model.Orders.Any())
+{
+    <div class="order-list shadow bg-white">
+        @foreach (var item in Model.Orders)
+        {
+            var total = 0;
+            <div class="order-item" data-id="@item.Id">
+                <table class="table">
+                    <tr>
+                        <th class="text-xl-left" style="width: 38%;">Thông tin sản phẩm</th>
+                        <th class="text-xl-right" style="width: 14%;">Số lượng</th>
+                        <th class="text-xl-right" style="width: 14%;">Giá</th>
+                        <th class="text-xl-right" style="width: 14%;">Thành tiền</th>
+                    </tr>
+                    @foreach (var order in Model.OrderDetails.Where(a => a.OrderId == item.Id))
+                    {
+                        var totalItem = Convert.ToInt32(order.Quantity * order.Price);
+                        <tr>
+                            <td>
+                                <div class="flex-item">
+                                    @if (order.Product.ListImage != null)
+                                    {
+                                        <img src="@Path.Combine("/images/products/", order.Product.ListImage.Split(',')[0])" alt="@order.Product.Name" class="img-product" />
+                                    }
+                                    <div class="product-name">
+                                        @order.Product.Name
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex-reverse">
+                                    x @order.Quantity
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex-reverse">
+                                    @Convert.ToDecimal(order.Price).ToString("N0")đ
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex-reverse" id="total">
+                                    @totalItem.ToString("N0")đ
+                                </div>
+                            </td>
+                        </tr>
+                        total += totalItem;
+                    }
+                </table>
+                <div class="sum border-top">Tổng tiền: <span>@total.ToString("N0")đ</span> </div>
+                @if (item.Status == 0)
+                {
+                    <div class="cancel-order">
+                        <a href="javascript:;" onclick="cancelOrder(@item.Id)">
+                            Hủy đơn
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="order-empty user-box text-center p-3 shadow">
+        <img src="~/Content/images/shopping-cart.gif" style="width:200px;"/> <br />
+        Chưa có đơn hàng! <br />
+    </div>
+}

@@ -1,0 +1,38 @@
+﻿@model ATTP.ViewModel.ReviewFormViewModel
+@if (Model.User != null)
+{
+    using (Html.BeginForm("SubmitReview", "Home", FormMethod.Post, new { @class = "form-comment", enctype = "multipart/form-data" }))
+    {
+        @*@Html.HiddenFor(a => userId)*@
+        @*@Html.HiddenFor(a => a.Product.Id)*@
+        <input type="hidden" name="ProductReview.ProductId" value="@Model.Product.Id" />
+        <input type="hidden" name="ProductReview.UserId" value="@Model.User.Id" />
+        @Html.ValidationSummary(true)
+        @Html.AntiForgeryToken()
+        <div class="box-rating">
+            <strong>Vui lòng đánh giá</strong>
+            <div id="full-stars-example-two" class="mt-2">
+                <div class="rating-group">
+                    <input class="rating__input rating__input--none" name="Rating" id="rating3-none" value="0" type="radio">
+                    <label aria-label="1 star" class="rating__label" for="rating3-1"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                    <input class="rating__input" name="ProductReview.Rating" id="rating3-1" value="1" type="radio">
+                    <label aria-label="2 stars" class="rating__label" for="rating3-2"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                    <input class="rating__input" name="ProductReview.Rating" id="rating3-2" value="2" type="radio">
+                    <label aria-label="3 stars" class="rating__label" for="rating3-3"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                    <input class="rating__input" name="ProductReview.Rating" id="rating3-3" value="3" type="radio">
+                    <label aria-label="4 stars" class="rating__label" for="rating3-4"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                    <input class="rating__input" name="ProductReview.Rating" id="rating3-4" value="4" type="radio">
+                    <label aria-label="5 stars" class="rating__label" for="rating3-5"><i class="rating__icon rating__icon--star fa fa-star"></i></label>
+                    <input checked class="rating__input" name="ProductReview.Rating" id="rating3-5" value="5" type="radio">
+                </div>
+            </div>
+            @Html.TextAreaFor(a => a.ProductReview.Comment, new { @class = "write-review__input form-control", placeholder = "Hãy chia sẻ cảm nhận, đánh giá của bạn về sản phẩm này nhé.", rows = "8" })
+        </div>
+        <div class="upload__img-wrap" id="previewContainer"></div>
+        <div class="write-review__buttons mt-3">
+            <label class="write-review__button write-review__button--image mb-0"><i class="fal fa-camera"></i>  Thêm ảnh <input type="file" multiple="" name="ImageFile" class="d-none" /></label>
+            <button type="submit" class="write-review__button write-review__button--submit">Gửi đánh giá</button>
+        </div>
+    }
+
+}

@@ -1,0 +1,98 @@
+﻿<div class="banner-page">
+    <div class="banner-page__img">
+        <img src="~/Content/images/img-main/gio-hang.jpg" alt="Giỏ hàng">
+    </div>
+    <div class="info-page">
+        <div class="container d-flex h-100 flex-column justify-content-center">
+            <div class="info-page__name">
+                Giỏ hàng
+            </div>
+            <div class="info-page_url text-white mt-1">
+                <a href="/" class="index-link mr-3">
+                    <img src="~/Content/images/img-main/icon-logo.png" alt="">
+                </a>
+                &gt;
+                <a href="" class="name-link ml-3">Giỏ hàng</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="shopping-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 border-right py-4">
+                <div class="cart-title">
+                    Thông tin giao hàng
+                </div>
+                <p class="login-redirec">Bạn đã có tài khoản? <a href="">Đăng nhập</a></p>
+                <form>
+                    <div class="form-row">
+                        <div class="col-12 form-group">
+                            <input type="text" name="name" value="" placeholder="Họ và tên" class="form-control" />
+                        </div>
+                        <div class="col-7 form-group">
+                            <input type="text" name="name" value="" placeholder="Email" class="form-control" />
+                        </div>
+                        <div class="col-lg-5 form-group">
+                            <input type="text" name="name" value="" placeholder="Số điện thoại" class="form-control" />
+                        </div>
+                        <div class="col-12 form-group">
+                            <input type="text" name="name" value="" placeholder="Địa chỉ" class="form-control" />
+                        </div>
+                        <div class="col-4 form-group">
+                            <select class="form-control">
+                                <option value="">
+                                    Chọn Tỉnh / Thành
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-4 form-group">
+                            <select class="form-control">
+                                <option value="">
+                                    Chọn Quận / Huyện
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-4 form-group">
+                            <select class="form-control">
+                                <option value="">
+                                    Chọn Phường / xã
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btnsubmit-cart mt-3">Hoàn tất đơn hàng</button>
+                </form>
+            </div>
+            <div class="col-lg-6 py-4">
+                @for (var i = 0; i < 4; i++)
+                {
+                    <div class="media item-card">
+                        <div class="media-thuml border">
+                            <img class="align-self-center mr-3" src="~/Content/images/img-main/san-pham.jpg" alt="Generic placeholder image">
+                            <div class="cart-number">
+                                1
+                            </div>
+                        </div>
+                        <div class="media-body ml-3">
+                            <div class="info-cart">
+                                <h5 class="mt-0">Tinh Chất Hồng Sâm Pha Sẵn KGC Cheong Kwan Jang EveryTime Balance</h5>
+                                <div class="quy-cach">
+                                    Hộp 20 gói
+                                </div>
+                            </div>
+                            <div class="cart-money">
+                                7,000,000₫
+                            </div>
+                        </div>
+                    </div>
+                }
+            <hr />
+            <div class="d-flex justify-content-between total">
+                <p>Tổng cộng</p>
+                <span>14,190,000₫</span>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,39 @@
+﻿@model ATTP.Models.Question
+@{
+    ViewBag.Title = "Cập nhật câu hỏi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .form_name {
+        width: 100px;
+    }
+</style>
+
+<a class="btn quick-link" href="@Url.Action("ListQuestion","Contact")"><i class="far fa-list mr-1"></i> Danh sách câu hỏi</a>
+<div class="box_content">
+    @using (Html.BeginForm("UpdateQuestion", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+        <table class="form_table">
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Ques)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Ques)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Reply)</td>
+                <td class="form_text">@Html.EditorFor(model => model.Reply)</td>
+            </tr>
+            <tr>
+                <td class="form_name">@Html.LabelFor(model => model.Active)</td>
+                <td class="form_text">@Html.CheckBoxFor(model => model.Active, new { @checked = "checked" })</td>
+            </tr>
+            <tr>
+                <td class="form_name"></td>
+                <td class="form_text">
+                    <input type="submit" class="btn quick-link" value="Cập nhật" />
+                </td>
+            </tr>
+        </table>
+    }
+</div>

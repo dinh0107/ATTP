@@ -1,0 +1,49 @@
+﻿@model ATTP.ViewModel.GetProductHot
+@if (Model.Products.Any())
+{
+    <div class="row row-cols-lg-5 mt-3">
+        @foreach (var item in Model.Products)
+        {
+            <div class="col-lg col-md-4 col-6">
+                <div class="card border-0 product-item rounded mb-3">
+                    <div class="thuml">
+                        <a href="@Url.Action("ProductDetail", new {url = item.Url})">
+                            @if (item.ListImage != null)
+                            {
+                                <img class="card-img-top lazyload" src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/products/", item.ListImage.Split(',')[0])" alt="@item.Name">
+                            }
+                            else
+                            {
+                                <img class="card-img-top lazyload" src="~/Content/images/img-main/on-image.jpg" alt="@item.Name">
+                            }
+                        </a>
+                        <div class="box-tag">
+                            @if (item.New)
+                            {
+                                <div class="tag new">
+                                    Mới
+                                </div>
+                            }
+                            @if (item.Selling)
+                            {
+                                <div class="tag best-saler">
+                                    Bán chạy
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body p-1 text-center">
+                        <a href="@Url.Action("ProductDetail", new {url = item.Url})" class="card-text">@item.Name</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+}
+else
+{
+    <div class="col-12 mt-3">
+        <p class="alert alert-success small">Danh mục đang cập nhật vui lòng quay lại sau!</p>
+    </div>
+}

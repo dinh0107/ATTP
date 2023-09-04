@@ -1,0 +1,290 @@
+﻿@model ATTP.ViewModel.HeaderViewModel
+@using ATTP.Models;
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    var username = ViewContext.RouteData.Values["Username"].ToString();
+    var avatar = ViewContext.RouteData.Values["Avatar"].ToString();
+}
+<header class="shadow">
+    <div class="header-top d-lg-block d-none">
+        <div class="container d-flex justify-content-between">
+            <div class="header-top__item d-flex">
+                <div class="header-top__info mr-5">
+                    <strong>Email:</strong>
+                    <a href="mailto:@config.Email">@config.Email</a>
+                </div>
+                <div class="header-top__info">
+                    <strong>Hotline:</strong>
+                    <a href="tel:@config.Hotline">@config.Hotline</a>
+                </div>
+            </div>
+            <div class="header-top__item d-flex ">
+                <div class="translate mr-2">
+                    <div class="translate_item">
+                        <div class="d-flex align-items-center" data-toggle="collapse" href="#box-lang" role="button" aria-expanded="false" aria-controls="box-lang">
+                            <i class="far fa-globe-asia mr-2"></i>
+                            <div class="lang" id="mylocation">
+                                VN
+                            </div>
+                            <i class="fas fa-caret-down ml-2"></i>
+                        </div>
+                        <div class="collapse shadow" id="box-lang">
+                            <div class="box-icon" id="google_translate_element2">
+                                <a href="javascript:;" onclick="doTranslate('vi|vi')" data-text="VN">
+                                    <img src="~/Content/images/img-main/vn.jpg" />
+                                </a>
+                                <a href="javascript:;" onclick="doTranslate('vi|en')" data-text="EN">
+                                    <img src="~/Content/images/img-main/anh.png" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                |
+                @if (username == "")
+                {
+                    <div class="group-btn ml-2">
+                        <a href="@Url.Action("Register" ,"User")"><i class="far fa-arrow-to-right mr-2"></i>Đăng ký</a>/
+                        <a href="@Url.Action("Login" ,"User")">Đăng nhập</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="box-user position-relative ml-3">
+                        <div class="name-user">
+                            <div class="avatar-header">
+                                @if (avatar != "")
+                                {
+                                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/users/", avatar)" class="lazyload" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/images/img-main/avatar.png" class="lazyload" />
+                                }
+                            </div>
+                            <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                @username
+                            </a>
+                        </div>
+                        <div class="collapse position-absolute user-link" id="collapseExample">
+                            <div class="card text-black p-2">
+                                <a href="@Url.Action("UserInfo" , "Dashboard")" class="user-ation">Thông tin tài khoản</a>
+                                <a href="@Url.Action("UserOrder" , "Dashboard")" class="user-ation">Lịch sử </a>
+                                <a href="@Url.Action("LogOut","User")" class="user-ation">Đăng xuất</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="header-main">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 d-flex align-items-center justify-content-between">
+                    <div class="btnToggle d-lg-none d-block" onclick="showMb()">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <div class="header-main__logo">
+                        <a href="/">
+                            @if (config.Image != null)
+                            {
+                                <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/configs/", config.Image)" class="img-fluid lazyload" alt="@config.Title" />
+                            }
+                        </a>
+                    </div>
+                    <div class="d-lg-none d-block">
+                        @Html.Action("CartSummary", "ShoppingCart")
+                    </div>
+                </div>
+                <div class="col-lg-8 d-lg-block d-none">
+                    <ul class="ul-reset header-main__ul">
+                        <li class="main-li">
+                            <a href="@Url.Action("About")">Về chúng tôi</a>
+                        </li>
+                        @foreach (var item in Model.ProductCategories.Where(a => a.ParentId == null))
+                        {
+                            <li class="main-li">
+                                <a href="@Url.Action("ProductCategory", new {url = item.Url})">@item.CategoryName</a>
+                                @if (Model.ProductCategories.Any(a => a.ParentId == item.Id))
+                                {
+                                    <div class="drop">
+                                        <ul class="sub-menu ul-reset ">
+                                            @foreach (var child in Model.ProductCategories.Where(a => a.ParentId == item.Id))
+                                            {
+                                                <li><a href="@Url.Action("ProductCategory", new {url = child.Url})">@child.CategoryName</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </li>
+                        }
+                        @foreach (var item in Model.ArticleCategories.Where(a => a.ParentId == null))
+                        {
+                            <li class="main-li">
+                                <a href="@Url.Action("ArticleCategory" , new {url = item.Url})">@item.CategoryName</a>
+                                @if (Model.ArticleCategories.Any(a => a.ParentId == item.Id))
+                                {
+                                    <div class="drop">
+                                        <ul class="sub-menu ul-reset ">
+                                            @foreach (var child in Model.ArticleCategories.Where(a => a.ParentId == item.Id))
+                                            {
+                                                <li><a href="@Url.Action("ArticleCategory", new {url = child.Url})">@child.CategoryName</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </li>
+                        }
+                        <li class="main-li">
+                            <a href="@Url.Action("Contact")">Liên hệ</a>
+                        </li>
+                        <li class="main-li search-btn" onclick="ShowSearch()">
+                            <i class="far fa-search"></i>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 d-lg-block d-none">
+                    @Html.Action("CartSummary", "ShoppingCart")
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search">
+        <div class="close" onclick="Close()">
+            <i class="far fa-times"></i>
+        </div>
+        <form action="@Url.Action("Search","Home")">
+            <input type="search" name="keywords" value="" placeholder="Nhập từ khóa tìm kiếm" />
+        </form>
+    </div>
+</header>
+<div class="header-mb d-lg-none d-block">
+    <div class="close-mb text-white" onclick="HidenMb()">
+        <i class="fas fa-times"></i>
+    </div>
+    
+    <div class="main-mb mt-5">
+        <div class="icon-mb">
+            <a href="javascript:;" onclick="doTranslate('vi|vi')" data-text="VN">
+                <img src="~/Content/images/img-main/vn.jpg" />
+            </a>
+            <a href="javascript:;" onclick="doTranslate('vi|en')" data-text="EN">
+                <img src="~/Content/images/img-main/anh.png" />
+            </a>
+        </div>
+        <div class="p-2 mx-3">
+            <form class="d-flex" action="@Url.Action("Search","Home")">
+                <input class="w-100" type="search" name="keywords" value="" placeholder="Tìm kiếm..." />
+                <button class="bg-white" type="submit"><i class="far fa-search"></i></button>
+            </form>
+        </div>
+
+        <ul class="ul-reset ul-mb">
+            <li class="li-mb">
+                <div class="d-flex align-items-center justify-content-between p-2 mx-3">
+                    <a href="@Url.Action("About")">Về chúng tôi</a>
+                </div>
+            </li>
+            @if (Model.ProductCategories.Any(a => a.ParentId == null))
+            {
+                foreach (var item in Model.ProductCategories.Where(a => a.ParentId == null))
+                {
+                    <li class="li-mb">
+                        <div class="d-flex align-items-center justify-content-between p-2 mx-3">
+                            <a href="@Url.Action("ProductCategory", new {url =item.Url})">@item.CategoryName</a>
+                            @if (Model.ProductCategories.Any(a => a.ParentId == item.Id))
+                            {
+                                <i class="fas fa-caret-down"></i>
+                            }
+                        </div>
+                        @if (Model.ProductCategories.Any(a => a.ParentId == item.Id))
+                        {
+                            <ul>
+                                @foreach (var child in Model.ProductCategories.Where(a => a.ParentId == null))
+                                {
+                                    <li class="p-2"><a class="mx-4" href="@Url.Action("ProductCategory", new {url = child.Url})">@child.CategoryName</a></li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            }
+            @if (Model.ArticleCategories.Any(a => a.ParentId == null))
+            {
+                foreach (var item in Model.ArticleCategories.Where(a => a.ParentId == null))
+                {
+                    <li class="li-mb">
+                        <div class="d-flex align-items-center justify-content-between p-2 mx-3">
+                            <a href="@Url.Action("ArticleCategory", new {url =item.Url})">@item.CategoryName</a>
+                            @if (Model.ArticleCategories.Any(a => a.ParentId == item.Id))
+                            {
+                                <i class="fas fa-caret-down"></i>
+                            }
+                        </div>
+                        @if (Model.ArticleCategories.Any(a => a.ParentId == item.Id))
+                        {
+                            <ul>
+                                @foreach (var child in Model.ArticleCategories.Where(a => a.ParentId == null))
+                                {
+                                    <li class="p-2"><a class="mx-4" href="@Url.Action("ArticleCategory  ", new {url = child.Url})">@child.CategoryName</a></li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            }
+            <li class="li-mb">
+                <div class="d-flex align-items-center justify-content-between p-2 mx-3">
+                    <a href="@Url.Action("Contact")">Liên hệ</a>
+                </div>
+            </li>
+        </ul>
+        @if (username == "")
+        {
+            <div class="box-account">
+                <a href="@Url.Action("Login", "User")">Đăng nhập</a>
+                <a href="@Url.Action("Register", "User")">Đăng ký</a>
+            </div>
+        }
+        else
+        {
+            <ul class="ul-reset author-login-mb">
+                <li>
+                    <a href="@Url.Action("UserInfo", "Dashboard")">
+                        <div class="user-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        Thông tin cá nhân
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("UserAddress", "Dashboard")">
+                        <div class="user-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        Quản lý địa chỉ
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("UserOrder", "Dashboard")">
+                        <div class="user-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        Đơn hàng của tôi
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Logout", "User")">
+                        <div class="user-icon">
+                            <i class="fal fa-sign-out"></i>
+                        </div>
+                        Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        }
+    </div>
+</div>
+<div class="overlay">
+</div>

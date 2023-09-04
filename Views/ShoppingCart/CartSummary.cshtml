@@ -1,0 +1,34 @@
+﻿@model ATTP.ViewModel.CartSummaryViewModel
+<div class="header-main__btn lp">
+    <a href="@Url.Action("Index", "ShoppingCart")" title="Giỏ hàng của bạn">
+        <i class="far fa-shopping-basket"></i>
+        GIỎ HÀNG
+        <div class="count-cart" id="itemshop">
+            @if (Model.Count < 100)
+            {
+                @Model.Count
+            }
+            else
+            {
+                @: 99+
+            }
+        </div>
+    </a>
+</div>
+
+<div class="header-main__btn mb">
+    <a href="@Url.Action("Index", "ShoppingCart")" title="Giỏ hàng của bạn">
+        <i class="far fa-shopping-basket"></i>
+        <div class="count-cart" id="itemshop">
+            @if (Model.Count < 100)
+            {
+                @Model.Count
+            }
+            else
+            {
+                @: 99+
+            }
+        </div>
+    </a>
+</div>
+

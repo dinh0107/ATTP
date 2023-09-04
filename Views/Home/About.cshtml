@@ -1,0 +1,291 @@
+﻿@model ATTP.ViewModel.AboutViewModel
+@using ATTP.Models
+@{
+    ViewBag.Title = "Giới thiệu";
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("Introduct");
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    var fb = Model.Banners.FirstOrDefault(a => a.GroupId == 1);
+    if (fb?.Image != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/banners/", fb.Image);
+    }
+}
+<div class="banner-page">
+    <div class="banner-page__img">
+        <img src="~/Content/images/img-main/banner-gioi-thieu.jpg" alt="giới thiệu">
+    </div>
+    <div class="info-page">
+        <div class="container d-flex h-100 flex-column justify-content-center">
+            <div class="info-page__name">
+                Giới thiệu
+            </div>
+            <div class="info-page_url text-white mt-1">
+                <a href="/" class="index-link mr-3">
+                    <img src="~/Content/images/img-main/icon-logo.png" alt="giới thiệu">
+                </a>
+                &gt;
+                <a href="" class="name-link ml-3">Giới thiệu</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="section-about">
+    <div class="container">
+        <div class="title">
+            <h3>công ty an toàn thực phẩm hà nội</h3>
+            <span>Công ty An Toàn Thực Phẩm Hà Nội là một doanh nghiệp hoạt động trong lĩnh vực kiểm soát chất lượng, an toàn và vệ sinh thực phẩm tại thành phố Hà Nội, Việt Nam. Công ty cung cấp dịch vụ kiểm tra, chẩn đoán, đánh giá và đảm bảo chất lượng an toàn thực phẩm cho các doanh nghiệp, cửa hàng, nhà hàng, nhà máy sản xuất và người tiêu dùng.</span>
+        </div>
+        @if (Model.Banners.Any(a => a.GroupId == 6))
+        {
+            <div class="row mt-lg-5 mt-3 ">
+                @foreach (var item in Model.Banners.Where(a => a.GroupId == 6))
+                {
+                    <div class="col-lg-4">
+                        <div class="card-item border-0 mb-3">
+                            @if (item.Image != null)
+                            {
+                                <img class="card-img-top rounded-0 lazyload" src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName">
+                            }
+                            else
+                            {
+                                <img class="card-img-top rounded-0" src="~/Content/images/img-main/on-image.jpg" alt="@item.BannerName">
+                            }
+                            <div class="card-body p-0 mt-3">
+                                <div class="card-name">@item.BannerName</div>
+                                <p class="card-text">@item.Slogan</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+@if (Model.Members.Any())
+{
+    <section class="member-section">
+        <div class="container">
+            <div class="title">
+                <h3>ban lãnh đạo công ty</h3>
+                <span>Với đội ngũ chuyên viên trình độ cao, chúng tôi tự tin rằng sẽ mang đến những dịch vụ tốt nhất cho khách hàng</span>
+            </div>
+            <div class="row mt-3">
+                <div class="col-lg-4">
+                    <div class="list-member-box">
+                        @foreach (var item in Model.Members.Where(a => a.Right))
+                        {
+                            <div class="box-member">
+                                @if (item.Image != null)
+                                {
+                                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/member/", item.Image)" alt="@item.Name" class="lazyload" />
+                                }
+                                <div class="box-info">
+                                    <div class="member-name">
+                                       @item.Name
+                                    </div>
+                                    <div class="member-classtify">
+                                       @item.Classify
+                                    </div>
+                                    <a href="javascript:;" data-src="@Url.Action("ViewMember", new {id  = item.Id})" data-fancybox data-type="ajax" data-touch="false" rel="noindex" class="btn btn-block">Xem thêm ›</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    
+                </div>
+                <div class="col-lg-8 d-flex align-items-center justify-content-end">
+                    <div class="list-member">
+                        @foreach (var item in Model.Members.Where(a => a.Right == false))
+                        {
+                            <div class="member-item">
+                                <div class="thuml">
+                                    @if (item.Image != null)
+                                    {
+                                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/member/", item.Image)" alt="@item.Name"  class="lazyload"/>
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/images/img-main/on-image.jpg" alt="@item.Name" />
+                                    }
+                                </div>
+                                <div class="member-name">
+                                    @item.Name
+                                </div>
+                                <div class="member-classtify">
+                                    @item.Classify
+                                </div>
+                                <a href="javascript:;" data-src="@Url.Action("ViewMember", new {id  = item.Id})" data-fancybox data-type="ajax" data-touch="false" rel="noindex" class="btn btn-block">Xem thêm  ›</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+<section class="question-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="title">
+                    <h3>vì sao chọn chúng tôi?</h3>
+                </div>
+                <div class="mt-3" id="accordion">
+                    @foreach (var item in Model.Question)
+                    {
+                        <div class="card border-0">
+                            <div class="card-header p-2 rounded" id="heading-@item.Id">
+                                <div class="mb-0">
+                                    <button class=" d-flex align-items-center greed " data-toggle="collapse" data-target="#collapse-@item.Id" aria-expanded="true" aria-controls="collapse-@item.Id">
+                                        <div class="box-item mr-2">
+                                            <i class="fas fa-plus-circle"></i>
+                                            <i class="fas fa-minus-circle" style="display:none"></i>
+                                        </div>
+                                        @item.Ques
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="collapse-@item.Id" class="collapse" aria-labelledby="heading-@item.Id" data-parent="#accordion">
+                                <div class="card-body">
+                                    @item.Reply
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6">
+                @if (config.AboutImage != null)
+                {
+                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/configs/", config.AboutImage)" alt="@config.Title" class="lazyload" />
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<section class="discover">
+    <div class="container">
+        <div class="title text-center">
+            <h3>gia nhập với chúng tôi</h3>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-6">
+                <div class="discover-album">
+                    @foreach (var item in Model.Banners.Where(a => a.GroupId == 7))
+                    {
+                        <div class="discover-album-img">
+                            <a data-fancybox href="@Path.Combine("/images/banners/", item.Image)">
+                                @if (item.Image != null)
+                                {
+                                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+                                }
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="video-discover">
+                    @foreach (var item in Model.Banners.Where(a => a.GroupId == 4))
+                    {
+                        <div class="video-discover__content">
+                            <a data-fancybox href="@item.Url">
+                                @if (item.Image != null)
+                                {
+                                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+                                }
+                                <i class="fas fa-play-circle"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+                <div class="video-discover-nav">
+                    @foreach (var item in Model.Banners.Where(a => a.GroupId == 4))
+                    {
+                        <div class="video-discover-nav__item">
+                            @if (item.Image != null)
+                            {
+                                <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@if (Model.Banners.Any(a => a.GroupId == 3))
+{
+    <section class="parther overflow-hidden">
+        <div class="container">
+            <div class="title">
+                <h3 class="text-white">Đối tác của chúng tôi</h3>
+            </div>
+            <div class="parther-slick">
+                @foreach (var item in Model.Banners.Where(a => a.GroupId == 3))
+                {
+                    <div class="parther-item">
+                        <a href="@item.Url">
+                            @if (item.Image != null)
+                            {
+                                <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/img-main/on-image.jpg" alt="@item.BannerName" class="lazyload" />
+                            }
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+@if (Model.Feedbacks.Any())
+{
+    <section class="feedback">
+        <div class="container">
+            <div class="title text-center">
+                <h3>khách hàng nói về chúng tôi</h3>
+            </div>
+            <div class="feedback-slick">
+                @foreach (var item in Model.Feedbacks)
+                {
+                    <div class="feedback-item">
+                        <div class="feedback-slick__des">
+                            @item.Content
+                        </div>
+                        <div class="feedback-slick__body">
+                            <div class="feedback-slick__avt">
+                                @if (item.Image != null)
+                                {
+                                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/feedbacks/", item.Image)" alt="@item.Name" class="lazyload" />
+                                }
+                                else
+                                {
+                                    <img src="~/Content/images/img-main/base64.gif" alt="@item.Name" class="lazyload" />
+                                }
+                            </div>
+                            <div class="ml-2">
+                                <div class="feedback-slick__name">
+                                    @item.Name
+                                </div>
+                                <div class="feedback-slick__classtify">
+                                   @item.Classify
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+@section Scripts
+    {
+    <script>
+        AboutJs()
+    </script>
+}

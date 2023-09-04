@@ -1,0 +1,77 @@
+﻿@model ATTP.Models.Contact
+@using ATTP.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = "Liên hệ";
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("Contact");
+}
+<div class="banner-page">
+    <div class="banner-page__img">
+        <img src="~/Content/images/img-main/banner-san-pham.jpg" alt="sản phẩm">
+    </div>
+    <div class="info-page">
+        <div class="container d-flex h-100 flex-column justify-content-center">
+            <div class="info-page__name">
+                Liên hệ
+            </div>
+            <div class="info-page_url text-white mt-1">
+                <a href="/" class="index-link mr-3">
+                    <img src="~/Content/images/img-main/icon-logo.png" alt="giới thiệu">
+                </a>
+                &gt;
+                <a href="" class="name-link ml-3">Liên hệ</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="contact-form">
+                    <div class="title">
+                        <h3>Nhập thông tin liên hệ</h3>
+                    </div>
+                    <form class="mt-4 form-contact">
+                        @Html.ValidationSummary(true)
+                        @Html.AntiForgeryToken()
+                        <div class="form-group font-weight-bold">
+                            @Html.LabelFor(a => a.FullName)
+                            @Html.TextBoxFor(a => a.FullName, new { @class = "form-control", @placeholder = "Nhập họ và tên" })
+                            @Html.ValidationMessageFor(a => a.FullName)
+                        </div>
+                        <div class="form-group font-weight-bold">
+                            @Html.LabelFor(a => a.Email)
+                            @Html.TextBoxFor(a => a.Email, new { @class = "form-control", @placeholder = "Nhập email" })
+                            @Html.ValidationMessageFor(a => a.Email)
+                        </div>
+                        <div class="form-group font-weight-bold">
+                            @Html.LabelFor(a => a.Mobile)
+                            @Html.TextBoxFor(a => a.Mobile, new { @class = "form-control", @placeholder = "Nhập số điện thoại" })
+                            @Html.ValidationMessageFor(a => a.Mobile)
+                        </div>
+                        <div class="form-group font-weight-bold ">
+                            @Html.LabelFor(a => a.Body)
+                            @Html.TextAreaFor(a => a.Body, new { @class = "form-control", @placeholder = "Lời nhắn" })
+                        </div>
+                        <div class="form-group">
+                            <button type="submit">Gửi ngay</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="title pb-3">
+                    <h3> Hãy để chúng tôi được <br /> đồng hành cùng quý khách</h3>
+                    <span>
+                        Cảm ơn đã ghé thăm website, vui lòng gọi ngay cho chúng tôi để câu trả lời nhanh nhất cho nhu cầu của anh chị cần nhé
+                    </span>
+                </div>
+                @Html.Raw(config.InfoContact)
+                <div class="embed-responsive embed-responsive-21by9 mt-4">
+                    @Html.Raw(config.GoogleMap)
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

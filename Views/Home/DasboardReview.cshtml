@@ -1,0 +1,113 @@
+﻿@model ATTP.ViewModel.DasboardReview
+<div class="col-lg-4">
+    <div class="title-detail">
+        Đánh Giá - Nhận Xét Từ Khách Hàng
+    </div>
+    <div class="calculate-star mt-3">
+        <div class="media align-items-center">
+            <div class="average">
+               @Model.Arverage
+            </div>
+            <div class="media-body">
+                <div class="my-rating-4" data-rating="@Model.Arverage"></div>
+                <p class="mb-0 quantity-comment">@Model.TotalReview nhận xét</p>
+            </div>
+        </div>
+    </div>
+    <div class="box-calculate ">
+        <div class="d-flex align-items-center mt-2">
+            <div class="my-rating" data-rating="5"></div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: @Model.PercentageFiveStar%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center mt-2">
+            <div class="my-rating" data-rating="4"></div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: @Model.PercentageFourStar%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center mt-2">
+            <div class="my-rating" data-rating="3"></div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: @Model.PercentageThreeStar%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center mt-2">
+            <div class="my-rating" data-rating="2"></div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: @Model.PercentageTwoStar%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center mt-2">
+            <div class="my-rating" data-rating="1"></div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: @Model.PercentageOneStar%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-8 d-lg-block d-none">
+    @if (!string.IsNullOrEmpty(Model.ListImg))
+    {
+        var arr = Model.ListImg.Split(',');
+        if (Model.ListImg.Count() > 6)
+        {
+            <div class="list-img-review">
+                @foreach (var item in arr.Take(6))
+                {
+                    <div class="review-img-item">
+                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/review/", item)" class="lazyload" />
+                        <div class="review-images__total">
+                            + @Model.CountImg
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="list-img-review">
+                @foreach (var item in arr.Take(6))
+                {
+                    <div class="review-img-item">
+                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/review/", item)" class="lazyload" />
+                    </div>
+                }
+            </div>
+        }
+    }
+
+
+    <div class="filter-review">
+        <div class="filter-review__label mr-2">
+            Lọc xem theo :
+        </div>
+        <div class="filter-review__inner">
+            <div class="filter-review__item " data-value="1">
+                Mới nhất
+            </div>
+            <div class="filter-review__item " data-value="2">
+                Có hình ảnh
+            </div>
+            <div class="filter-review__item " data-value="3">
+                Đã mua hàng
+            </div>
+            <div class="filter-review__item " data-value="4">
+                5 <i class="fal fa-star"></i>
+            </div>
+            <div class="filter-review__item " data-value="5">
+                4 <i class="fal fa-star"></i>
+            </div>
+            <div class="filter-review__item " data-value="6">
+                3 <i class="fal fa-star"></i>
+            </div>
+            <div class="filter-review__item " data-value="7">
+                2 <i class="fal fa-star"></i>
+            </div>
+            <div class="filter-review__item " data-value="8">
+                1 <i class="fal fa-star"></i>
+            </div>
+        </div>
+    </div>
+</div>

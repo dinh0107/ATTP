@@ -1,0 +1,326 @@
+﻿@model ATTP.ViewModel.ProductDetailViewModel
+@using ATTP.Models
+@using Helpers
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = Model.Product.TitleMeta ?? Model.Product.Name;
+    ViewBag.Description = Model.Product.DescriptionMeta ?? Model.Product.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("ProductDetail", new { url = Model.Product.Url });
+    if (Model.Product.ListImage != null)
+    {
+        ViewBag.ImgShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/products/", Model.Product.ListImage.Split(',')[0]);
+    }
+}
+<div class="banner-page">
+    <div class="banner-page__img">
+        <img src="~/Content/images/img-main/chi-tiet.jpg" alt=" ">
+    </div>
+    <div class="info-page">
+        <div class="container d-flex h-100 flex-column justify-content-center">
+            <div class="info-page__name">
+                Chi tiết sản phẩm
+            </div>
+            <div class="info-page_url text-white mt-1">
+                <a href="/" class="index-link mr-3">
+                    <img src="~/Content/images/img-main/icon-logo.png" alt="">
+                </a>
+                &gt;
+                <a href="" class="name-link ml-3">Chi tiết sản phẩm</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="product-detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row box-img">
+                    @if (Model.Product.ListImage != null)
+                    {
+                        var arr = Model.Product.ListImage.Split(',');
+                        <div class="col-lg-2 order-lg-0 order-1">
+                            <div class="slider-nav">
+                                @foreach (var item in arr)
+                                {
+                                    <div class="slider-nav-item">
+                                        <img data-src="@Path.Combine("/images/products/", item)" src="~/Content/images/img-main/base64.gif" alt="@Model.Product.Name" class="lazyload" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-10">
+                            <div class="slider-for">
+                                @foreach (var item in arr)
+                                {
+                                    <div class="slider-for-item">
+                                        <a href="@Path.Combine("/images/products/", item)" data-fancybox="gallery">
+                                            <img data-src="@Path.Combine("/images/products/", item)" src="~/Content/images/img-main/base64.gif" alt="@Model.Product.Name" class="lazyload" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h1 class="product-name">
+                    @Model.Product.Name
+                </h1>
+                <div class="box-price">
+                    <div class="ml-1 pl-2">
+                        @if (Model.Product.PriceSale > 0)
+                        {
+                            var percent = (decimal)Model.Product.PriceSale / (decimal)Model.Product.Price;
+                            var discount = 100 - Math.Truncate(percent * 100);
+                            <div class="price">
+                                @Html.DisplayFor(a => a.Product.PriceSale)
+                            </div>
+                            <div class="d-flex">
+                                <div class="price-sale">
+                                    @Html.DisplayFor(a => a.Product.Price)
+                                </div>
+                                <div class="discount">
+                                    -@discount%
+                                </div>
+                            </div>
+                        }
+                        else if (Model.Product.Price > 0)
+                        {
+                            <div class="price">
+                                @Html.DisplayFor(a => a.Product.Price)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="price">
+                                Liên hệ
+                            </div>
+                        }
+                    </div>
+                </div>
+                @if (Model.Product.Description != null)
+                {
+                    <div class="product-desc">
+                        <div class="content">
+                            @Html.Raw(HtmlHelpers.ReplaceLine(Model.Product.Description))
+                        </div>
+                    </div>
+                }
+
+                <form id="formBookProduct">
+                    <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+                    <div class="d-flex align-items-center flex-wrap box-quntity">
+                        <div class="quantity">
+                            <div class="product-count">
+                                <input type="text" value="1" min="1" id="number" name="quantity" class="nice-number input-number" maxlength="4" />
+                            </div>
+                        </div>
+                        <div class="product-number">
+                            (@Model.Product.Quantity sản phẩm có sẵn)
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center flex-wrap mt-3">
+                        @if (Model.Product.Quantity == 0)
+                        {
+                            <a href="tel:@config.Hotline" class="btn-order"> <i class="fas fa-phone-alt mr-2"></i>Liên hệ</a>
+
+
+                            <button type="submit" disabled class="btn-cart ml-3">
+                                <i class="fas fa-shopping-cart"></i>
+                                Tạm hết hàng
+                            </button>
+                        }
+                        else
+                        {
+                            <button href="" class="btn-order"> <i class="fas fa-shopping-bag mr-2"></i>Mua ngay</button>
+                            <button type="submit" class="btn-cart ml-3">
+                                <i class="fas fa-shopping-cart"></i>
+                                Thêm vào giỏ hàng
+                            </button>
+                        }
+                    </div>
+                </form>
+                <div class="share">
+                    <ul class="d-flex align-items-center ul-reset">
+                        <li class="mr-3">Chia sẻ:</li>
+                        <li><button class="facebook" onclick="window.open('https://www.facebook.com/sharer.php?u='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/facebook.png" /></button></li>
+                        <li><button class="google-plus" onclick="window.open('https://myaccount.google.com/?url='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/google-plus.png" /></button></li>
+                        <li><button class="twitter" onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(location.href)+'&amp;text='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/twitter.png"></button></li>
+                        <li><button class="mess" onclick="window.open('https://www.messenger.com/?url='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/mess.png"></button></li>
+                        <li><button class="pinterest" onclick="window.open('https://www.pinterest.com/?url='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/pinterest.png"></button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active rounded-0" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">CHI TIẾT SẢN PHẨM</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link rounded-0" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">BÌNH LUẬN</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade  show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                @if (Model.Product.Body != null)
+                {
+                    <div class="detail-content">
+                        @Html.Raw(Model.Product.Body)
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-12">
+                        <p class="alert alert-success small">Nội dung hiện chưa được cập nhật. Vui lòng quay lại sau !!!!</p>
+                    </div>
+                }
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                @if (Model.HasPurchased)
+                {
+                    @Html.Action("ReviewForm")
+                }
+                else
+                {
+                    <div class="col-lg-12">
+                        <p class="alert alert-success small">Bạn phải mua hàng để được đánh giá sản phẩm này !!!!</p>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row mt-4">
+            @Html.Action("DasboardReview")
+        </div>
+        <div>
+            @Html.Action("GetReview")
+        </div>
+    </div>
+</section>
+@if (Model.Products.Any())
+{
+    <section class="relate">
+        <div class="container">
+            <div class="title">
+                <h3>sản phẩm liên quan</h3>
+                <a href="@Url.Action("ProductCategory", new {url = Model.Product.ProductCategory.Url})" class="view-more ml-4">XEM THÊM <i class="far fa-arrow-right"></i></a>
+            </div>
+            <div class="list-product mt-4">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="card product">
+                        <div class="thuml">
+                            <a href="@Url.Action("ProductDetail", new {url = item.Url})">
+                                @if (item.ListImage != null)
+                                {
+                                    <img class="card-img-top lazyload" src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/products/", item.ListImage.Split(',')[0])" alt="@item.Name">
+                                }
+                                else
+                                {
+                                    <img class="card-img-top lazyload" src="~/Content/images/img-main/on-image.jpg" alt="@item.Name">
+                                }
+                            </a>
+                            @if (item.PriceSale > 0)
+                            {
+                                var percent = (decimal)item.PriceSale / (decimal)item.Price;
+                                var discount = 100 - Math.Truncate(percent * 100);
+                                <div class="discount">
+                                    -@discount%
+                                </div>
+                            }
+                            <div class="box-action">
+                                <a href=""><i class="fas fa-shopping-bag"></i></a>
+                                <a href=""><i class="fas fa-cart-plus"></i></a>
+                            </div>
+                        </div>
+                        <div class="card-body p-3 mt-2">
+                            <a href="@Url.Action("ProductDetail", new {url = item.Url})" class="card-title">@item.Name</a>
+                            <div class="product-price">
+                                @if (item.PriceSale > 0)
+                                {
+                                    <p>@Html.DisplayFor(a => item.PriceSale)</p>
+                                    <del>@Html.DisplayFor(a => item.Price)</del>
+                                }
+                                else if (item.Price > 0)
+                                {
+                                    <p>@Html.DisplayFor(a => item.Price)</p>
+                                }
+                                else
+                                {
+                                    <p class="w-100 text-center">Liên hệ</p>
+                                }
+                            </div>
+                            <a href="@Url.Action("ProductDetail", new {url = item.Url})" class="btn btn-block mt-3">XEM THÊM</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <link href="~/Content/star-rating-svg.css" rel="stylesheet" />
+    </section>
+}
+@section Scripts{
+    <script src="~/Scripts/rating.js"></script>
+    <script src="~/Scripts/jquery.star-rating-svg.min.js"></script>
+    <script src="~/Scripts/jquery.nice-number.js"></script>
+    <script>
+        DetailJs()
+        $(".my-rating-4").starRating({
+            totalStars: 5,
+            starShape: 'rounded',
+            starSize: 30,
+            strokeColor: '#FFA142',
+            emptyColor: 'lightgray',
+            hoverColor: '#ffcf02',
+            activeColor: '#ffcf02',
+            useGradient: false,
+            readOnly: true,
+            useFullStars: true
+        });
+        $(".my-rating").starRating({
+            totalStars: 5,
+            starShape: 'rounded',
+            starSize: 16,
+            strokeColor: '#FFA142',
+            emptyColor: '#E8E9ED',
+            hoverColor: '#ffcf02',
+            activeColor: '#ffcf02',
+            useGradient: false,
+            readOnly: true,
+            useFullStars: true
+        });
+        $("input[type='file']").change(function (event) {
+            var files = event.target.files;
+            var previewContainer = $("#previewContainer");
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var imgElement = document.createElement("img");
+                    imgElement.src = e.target.result;
+                    imgElement.className = "preview-image";
+
+                    var deleteButton = document.createElement("button");
+                    deleteButton.innerHTML = '<i class="far fa-times"></i>';
+                    deleteButton.className = "delete-button";
+                    deleteButton.onclick = function () {
+                        imgElement.remove();
+                        deleteButton.remove();
+                    };
+
+                    var previewWrapper = document.createElement("div");
+                    previewWrapper.className = "preview-wrapper";
+
+                    previewWrapper.appendChild(imgElement);
+                    previewWrapper.appendChild(deleteButton);
+                    previewContainer.append(previewWrapper);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+}

@@ -1,0 +1,101 @@
+﻿@model ATTP.ViewModel.ListUserViewModel
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Danh sách tài khoản";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h2>Danh sách tài khoản</h2>
+<a class="btn quick-link" href="@Url.Action("Index","Vcms")"><i class="fal fa-home mr-1"></i>Về trang chính</a>
+<div class="box_content">
+    <div class="form-search-list">
+        <form action="@Url.Action("ListUser")" method="get" class="ml-0">
+            <p>
+                Tìm theo email: @Html.TextBoxFor(a => a.Email, new { @class = "w300" })
+                <button type="submit" class="btn-search">Tìm kiếm</button>
+            </p>
+        </form>
+    </div>
+    <p>Có tổng số <strong>@Model.Users.TotalItemCount</strong> số tài khoản</p>
+    <table class="list_table tablecenter table-striped">
+        <tbody>
+            <tr>
+                <th>Tên đăng nhâp</th>
+                <th style="width: 150px">Họ và tên</th>
+                <th>Email</th>
+                <th>
+                    Hoạt động
+                </th>
+                <th style="width: 150px"></th>
+            </tr>
+            @foreach (var user in Model.Users)
+            {
+                <tr data-id="@user.Id">
+                    <td>
+                        @user.Username
+                    </td>
+                    <td>
+                        <strong>@user.FullName</strong>
+                    </td>
+                    <td>@user.Email</td>
+                    <td>@Html.DisplayFor(a => user.Active)</td>
+                    <td>
+                        <a href="javascript:;" class="text-danger" onclick="LoadUser(@user.Id)">Đơn hàng</a>
+                        -
+                        <a href="javascript:;" onclick="deleteUser('@user.Id')">Xóa</a>
+                    </td>
+                </tr>
+            }
+            @if (Model.Users.PageCount > 1)
+            {
+                <tr>
+                    <td colspan="7">@Html.PagedListPager(Model.Users, page => Url.Action("ListUser", new { page, name = Model.Email }))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="contactDetails"></div>
+@section scripts{
+    <script type="text/javascript">
+        function deleteUser(id) {
+            if (confirm("Bạn có chắc chắn xóa quản trị này không?")) {
+                $.post("/Contact/DeleteUser", { IdUser: id }, function (data) {
+                    if (data) {
+                        $.toast({
+                            text: 'Xóa quản trị viên thành công',
+                            position: 'bottom-right',
+                            icon: 'success',
+                        })
+                        $("tr[data-id='" + id + "']").fadeOut();
+                    } else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            icon: 'error',
+                        })
+                    }
+                });
+            }
+        }
+        function LoadUser(id) {
+            $.get("/Contact/GetOrderUser", { IdUser: id }, function (data) {
+                $("#contactDetails").html(data);
+                $("#contactDetails").dialog("open");
+            });
+        }
+        $(function () {
+            $("#contactDetails").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 800,
+                show: {
+                    effect: "blind",
+                    duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                }
+            });
+        });
+    </script>
+}

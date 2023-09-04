@@ -1,0 +1,180 @@
+﻿@model ATTP.ViewModel.GetReviewViewModel
+@foreach (var item in Model.ProductReviews.Where(a => a.ProductId == Model.Product.Id && a.ParentReviewId == 0))
+{
+    var date = item.CreatedAt;
+    DateTime now = DateTime.Now;
+    TimeSpan timeDifference = now - date;
+    int days = timeDifference.Days;
+    int hours = timeDifference.Hours;
+    int minutes = timeDifference.Minutes;
+
+    <hr />
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="review-comment__user">
+                <div class="review-comment__user-inner">
+                    <div class="review-comment__user-avatar">
+                        @if (item.User.Avatar != null)
+                        {
+                            <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/users/", item.User.Avatar)" alt="@item.User.FullName" class="lazyload" />
+                        }
+                        else
+                        {
+                            <img src="~/Content/images/img-main/avatar.png" alt="@item.User.FullName" />
+                        }
+                    </div>
+                    
+                    <div>
+                        <div class="review-comment__user-name">
+                            @item.User.FullName
+                        </div>
+                        <div class="review-comment__user-date">
+                            Đã tham gia vào @item.User.CreateDate.ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+                </div>
+                @*<div class="review-comment__user-info mt-3">
+                    <i class="fal fa-comment-alt-lines"></i>
+                    Đã viết
+                    <span>21 Đánh giá</span>
+                </div>
+                <div class="review-comment__user-info mt-2">
+                    <i class="fal fa-thumbs-up"></i>
+                    Đã nhận
+                    <span>21 lời cảm ơn</span>
+                </div>*@
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="review-comment__rating-title">
+                <div class="star">
+                    @for (var i = 0; i < item.Rating; i++)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                </div>
+                <div class="review-comment__title">
+                    @switch (item.Rating)
+                    {
+                        case 1:
+                            @:Rất không hài lòng
+                            break;
+                        case 2:
+                            @:Không hài lòng
+                            break;
+                        case 3:
+                            @:Bình thường
+                            break;
+                        case 4:
+                            @:Hài lòng
+                            break;
+                        case 5:
+                            @:Cực kì hài lòng
+                            break;
+                    }
+                </div>
+            </div>
+            <div class="review-comment__seller-name-attributes mt-2">
+                <div class="review-comment__seller-name">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    Đã mua hàng
+                </div>
+            </div>
+            <div class="review-comment__content mb-3">
+                @item.Comment
+            </div>
+            <div class="review-comment__images">
+                @if (item.ListImage != null)
+                {
+                    var reviewImg = item.ListImage.Split(',');
+                    foreach (var img in reviewImg)
+                    {
+                        <a href="@Path.Combine("/images/review/", img)" data-fancybox="gallery">
+                            <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/review/", img)" class="lazyload" />
+                        </a>
+                    }
+                }
+            </div>
+            <div class="review-comment__created-date mb-4">
+                Đánh giá vào
+                @if (days > 0)
+                {
+                    @days @:ngày trước.
+                }
+                else if (hours > 0)
+                {
+                    @hours @:giờ trước.
+                }
+                else
+                {
+                    @minutes @:phút trước.
+                }
+                @item.CreatedAt.ToString("dd/MM/yyyy")
+            </div>
+            <span class="review-comment__thank " data-review-id="@item.Id" ><i class="fal fa-thumbs-up mr-2"></i>Hữu ích(@item.Likes)</span>
+            <span class="review-comment__reply show-sub" >Bình luận</span>
+            <form class="reply-form mt-4" style="display:none">
+                @Html.ValidationSummary(true)
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="UserId" value="@item.User.Id" />
+                <input type="hidden" name="commentId" value="@item.Id" />
+                <input type="hidden" name="productId" value="@item.Product.Id" />
+                <input type="text" name="ProductReview.Comment" placeholder="Bình luận" required />
+                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+            </form>
+
+            @if (Model.ProductReviews.Any(a => a.ProductId == Model.Product.Id && a.ParentReviewId == item.Id))
+            {
+                foreach (var sub in Model.ProductReviews.Where(a => a.ProductId == Model.Product.Id && a.ParentReviewId == item.Id))
+                {
+                    var subdate = sub.CreatedAt;
+                    TimeSpan subtimeDifference = now - subdate;
+                    int subdays = subtimeDifference.Days;
+                    int subhours = subtimeDifference.Hours;
+                    int subminutes = subtimeDifference.Minutes;
+                    <div class="review-comment__sub-comments mt-4">
+                        <div class="media">
+                            @if (sub.User.Avatar != null)
+                            {
+                                <img class="mr-3 lazyload" src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/users/", sub.User.Avatar)" alt="@sub.User.FullName">
+
+                            }
+                            else
+                            {
+                                <img class="mr-3" src="~/Content/images/img-main/avatar.png" alt="@sub.User.FullName">
+                            }
+                            <div class="media-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="mt-0 sub-comment-name">@sub.User.FullName</div>
+                                    <div class="reply-time ml-2">
+                                        @if (subdays > 0)
+                                        {
+                                            @subdays @:ngày trước
+                                        }
+                                        else if (subhours > 0)
+                                        {
+                                            @subhours @:giờ trước
+                                        }
+                                        else
+                                        {
+                                            @subminutes @:phút trước
+                                        }
+                                        @sub.CreatedAt.ToString("dd/MM/yyyy")
+                                    </div>
+                                </div>
+                                <div class="sub-comment-text">
+                                    @sub.Comment
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+
+        </div>
+    </div>
+}
+<script>
+
+</script>

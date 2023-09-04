@@ -1,0 +1,326 @@
+﻿@model ATTP.ViewModel.HomeViewModel
+@using ATTP.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    ViewBag.Title = config.Title;
+    ViewBag.Description = config.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("Index");
+    var fb = Model.Banners.FirstOrDefault(a => a.GroupId == 1);
+    if (fb?.Image != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/banners/", fb.Image);
+    }
+    var isEven = false;
+    var id = ViewContext.RouteData.Values["Id"];
+}
+@if (Model.Banners.Any())
+{
+    <section class="banner">
+        <div class="list-banner">
+            @foreach (var item in Model.Banners)
+            {
+                <a href="@item.Url">
+                    @if (item.Image != null)
+                    {
+                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+                    }
+                </a>
+            }
+        </div>
+    </section>
+}
+<section class="my-product">
+    <div class="container">
+        <div class="title">
+            <h3>Sản phẩm của chúng tôi</h3>
+        </div>
+        <div class="my-reponsive">
+            <div class="border rounded box-cat p-1 header-cat">
+                <p class="category-h active" data-value="">Sản phẩm đề xuất</p>
+                @foreach (var item in Model.ProductCategories)
+                {
+                    <p class="category-h" data-value="@item.Id">@item.CategoryName</p>
+                }
+            </div>
+        </div>
+        <div id="list-item-sort">
+            @Html.Action("GetProductHot")
+        </div>
+    </div>
+</section>
+@if (Model.ProductSaler.Any())
+{
+    <section class="best-saler-product">
+        <div class="container">
+            <div class="title-box">
+                best seller & yêu thích
+            </div>
+            <div class="list-saler mt-4">
+                @foreach (var item in Model.ProductSaler)
+                {
+                    <div class="card product-saler border-0">
+                        <div class="thuml-saler @(isEven ? "bg-even" : "bg-odd")">
+                            <a href="@Url.Action("ProductDetail", new {url = item.Url})">
+                                @if (item.ListImage != null)
+                                {
+                                    <img class="card-img-top lazyload" src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/products/", item.ListImage.Split(',')[0])" alt="@item.Name">
+                                }
+                                else
+                                {
+                                    <img class="card-img-top lazyload" src="~/Content/images/img-main/on-image.jpg" alt="@item.Name">
+                                }
+                            </a>
+                            <div class="box-tag">
+                                @if (item.New)
+                                {
+                                    <div class="tag new">
+                                        Mới
+                                    </div>
+                                }
+                                @if (item.Selling)
+                                {
+                                    <div class="tag best-saler">
+                                        Bán chạy
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="card-body p-0 mt-2">
+                            <a href="@Url.Action("ProductDetail", new {url = item.Url})" class="card-title">@item.Name</a>
+                            <p class="card-text">@item.Description</p>
+                            <a href="@Url.Action("ProductDetail", new {url = item.Url})" class="btn btn-block">XEM THÊM</a>
+                        </div>
+                    </div>
+                    isEven = !isEven;
+                }
+            </div>
+            <div class="text-center mt-4">
+                <a href="" class="view-more">XEM THÊM <i class="far fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+}
+@if (Model.CategoryItems.Any())
+{
+    foreach (var item in Model.CategoryItems)
+    {
+        if (item.Products.Any())
+        {
+            <section class="section-product @(isEven ? "bg-white" : "bg-light")">
+                <div class="container">
+                    <div class="title-box">
+                        Sản phẩm @item.ProductCategory.CategoryName
+                    </div>
+                    <div class="list-product mt-4">
+                        @foreach (var product in item.Products)
+                        {
+                            <div class="card product">
+                                <div class="thuml">
+                                    <a href="@Url.Action("ProductDetail", new {url = product.Url})">
+                                        @if (product.ListImage != null)
+                                        {
+                                            <img class="card-img-top lazyload" src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/products/", product.ListImage.Split(',')[0])" alt="@product.Name">
+                                        }
+                                        else
+                                        {
+                                            <img class="card-img-top lazyload" src="~/Content/images/img-main/on-image.jpg" alt="@product.Name">
+                                        }
+                                    </a>
+                                    @if (product.PriceSale > 0)
+                                    {
+                                        var percent = (decimal)product.PriceSale / (decimal)product.Price;
+                                        var discount = 100 - Math.Truncate(percent * 100);
+                                        <div class="discount">
+                                            -@discount%
+                                        </div>
+                                    }
+                                <div class="box-action">
+                                    <a href="@Url.Action("ProductDetail", new {url = product.Url})"><i class="far fa-eye"></i></a>
+                                    @if (product.Quantity > 0)
+                                    {
+                                        if (id != null)
+                                        {
+                                            <a href="javascript:;" onclick="addToCart(@product.Id, @id)"><i class="fas fa-cart-plus"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="javascript:;" onclick="addToCart(@product.Id)"><i class="fas fa-cart-plus"></i></a>
+                                        }
+                                    }
+                                </div>
+                                </div>
+                                <div class="card-body p-3 mt-2">
+                                    <a href="@Url.Action("ProductDetail", new {url = product.Url})" class="card-title">@product.Name</a>
+                                    <div class="product-price">
+                                        @if (product.PriceSale > 0)
+                                        {
+                                            <p>@Html.DisplayFor(a => product.PriceSale)</p>
+                                            <del>@Html.DisplayFor(a => product.Price)</del>
+                                        }
+                                        else if (product.Price > 0)
+                                        {
+                                            <p>@Html.DisplayFor(a => product.Price)</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="w-100 text-center">Liên hệ</p>
+                                        }
+                                    </div>
+                                    <a href="@Url.Action("ProductDetail", new {url = product.Url})" class="btn btn-block mt-3">XEM THÊM</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="text-center mt-5">
+                        <a href="@Url.Action("ProductCategory", new {url = item.ProductCategory.Url})" class="view-more">XEM THÊM <i class="far fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+        }
+        isEven = !isEven;
+    }
+}
+@if (Model.Articles.Any())
+{
+    <section class="section-article">
+        <div class="container">
+            <div class="title">
+                <h3>Tin tức</h3>
+                <div class="article-nav d-flex">
+                    <ul class="ul-reset">
+                        <li><a href="@Url.Action("AllArticle", "Home")">Tất cả</a></li>
+                        @foreach (var item in Model.ArticleCategories.Take(3))
+                        {
+                            <li><a href="@Url.Action("ArticleCategory", "Home" , new {url = item.Url})">@item.CategoryName</a></li>
+                        }
+                    </ul>
+                    <a href="@Url.Action("AllArticle", "Home")" class="view-more ml-4">XEM THÊM <i class="far fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-lg-8">
+                    <div class="row">
+                        @foreach (var item in Model.Articles.Take(2))
+                        {
+                            <div class="col-lg-6  col-md-6">
+                                <div class="article-bg-item">
+                                    <div class="article-bg-item__img">
+                                        <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                            @if (item.Image != null)
+                                            {
+                                                <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/articles/",item.Image)" alt="@item.Subject" class="lazyload">
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Content/images/img-main/on-image.jpg" alt="@item.Subject" class="lazyload">
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="article-bg-item__body">
+                                        <div class="article-bg-item__date">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            @item.CreateDate.ToString("dd/MM/yyyy")
+                                        </div>
+                                        <a href="@Url.Action("ArticleDetail", new {url = item.Url})" class="article-bg-item__name truncate">
+                                            @item.Subject
+                                        </a>
+                                        <div class="truncate article-bg-item__des">
+                                            @item.Description
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="right-article">
+                        @foreach (var item in Model.Articles.Skip(2).Take(4))
+                        {
+                            <div class="right-article-item">
+                                <div class="right-article-item__img">
+                                    <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                        @if (item.Image != null)
+                                        {
+                                            <img src="~/Content/images/img-main/on-image.jpg" data-src="@Path.Combine("/images/articles/", item.Image)" alt="@item.Subject" class="lazyload">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/Content/images/img-main/on-image.jpg" alt="@item.Subject" class="lazyload">
+                                        }
+                                    </a>
+                                </div>
+                                <div class="right-article-item__body">
+                                    <a href="@Url.Action("ArticleDetail", new {url = item.Url})" class="right-article-item__name truncate">
+                                        @item.Subject
+                                    </a>
+                                    <div class="right-article-item__des truncate">
+                                        @item.Description
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+<section class="question-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="title">
+                    <h3>vì sao chọn chúng tôi?</h3>
+                </div>
+                <div class="mt-3" id="accordion">
+                    @foreach (var item in Model.Questions)
+                    {
+                        <div class="card border-0">
+                            <div class="card-header p-2 rounded" id="heading-@item.Id">
+                                <div class="mb-0">
+                                    <button class=" d-flex align-items-center greed " data-toggle="collapse" data-target="#collapse-@item.Id" aria-expanded="true" aria-controls="collapse-@item.Id">
+                                        <div class="box-item mr-2">
+                                            <i class="fas fa-plus-circle"></i>
+                                            <i class="fas fa-minus-circle" style="display:none"></i>
+                                        </div>
+                                        @item.Ques
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="collapse-@item.Id" class="collapse" aria-labelledby="heading-@item.Id" data-parent="#accordion">
+                                <div class="card-body">
+                                    @item.Reply
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-6">
+                @if (config.AboutImage != null)
+                {
+                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/configs/", config.AboutImage)" alt="@config.Title" class="lazyload" />
+                }
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts
+    {
+    <script>
+        IndexJs()
+        $('.header-cat .category-h').click(function () {
+            $('.header-cat .category-h').removeClass('active');
+            $(this).addClass('active');
+        });
+        $(document).on('click', '.category-h', function () {
+            let id = parseInt($('.category-h.active').data('value'));
+            $.get("/Home/GetProductHot", { catId: id }, function (data) {
+                $('#list-item-sort').empty();
+                $('#list-item-sort').html(data);
+            });
+        });
+    </script>
+}

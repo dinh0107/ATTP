@@ -1,0 +1,204 @@
+﻿@model ATTP.ViewModel.CheckOutViewModel
+@using ATTP.Models
+@{
+    ViewBag.Title = "Thanh toán";
+    var final = Model.CartTotal + Model.Order.ShipFee;
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+<div class="banner-page">
+    <div class="banner-page__img">
+        <img src="~/Content/images/img-main/gio-hang.jpg" alt="Giỏ hàng">
+    </div>
+    <div class="info-page">
+        <div class="container d-flex h-100 flex-column justify-content-center">
+            <div class="info-page__name">
+                Thanh toán
+            </div>
+            <div class="info-page_url text-white mt-1">
+                <a href="/" class="index-link mr-3">
+                    <img src="~/Content/images/img-main/icon-logo.png" alt="">
+                </a>
+                &gt;
+                <a href="" class="name-link ml-3">Thanh toán</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="shopping-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 border-right py-4">
+                <div class="cart-title">
+                    Thông tin giao hàng
+                </div>
+                @if (Model.User == null)
+                {
+                    <p class="login-redirec">Bạn đã có tài khoản? <a href="@Url.Action("Login" , "User")">Đăng nhập</a></p>
+                }
+                @using (Html.BeginForm())
+                {
+                    @Html.ValidationSummary(true)
+                    @Html.AntiForgeryToken();
+                    if (Model.User != null)
+                    {
+                        <div class="box-checkout box-address address-default">
+                            <div class="box-btn">
+                                <a href="@Url.Action("UserAddress", "Dashboard")" class="btn-new-address">
+                                    <i class="fal fa-plus-circle"></i>
+                                    Tạo địa chỉ mới
+                                </a>
+                                <div class="btn-list-address">
+                                    <i class="fas fa-address-book"></i>
+                                    Sổ địa chỉ
+                                </div>
+                            </div>
+                            @if (Model.Addresses.Any())
+                            {
+                                <div class="address-item">
+                                    <input type="hidden" name="AddressId" value="@Model.Address.Id" />
+                                    <input type="hidden" name="CityId" value="@Model.Address.CityId" />
+                                    <input type="hidden" name="Order.CityId" value="@Model.Address.CityId" />
+                                    <input type="hidden" name="DistrictId" value="@Model.Address.DistrictId" />
+                                    <div class="address-info">
+                                        <div class="address-bold">
+                                            @Model.Address.Fullname <span>|</span> @Model.Address.Mobile
+                                        </div>
+                                        @Model.Address.SpecificAddress, @Model.Address.District.Name, @Model.Address.City.Name
+                                    </div>
+                                    <a href="@Url.Action("UpdateAddress", "Dashboard", new { addressId = Model.Address.Id })" class="btn-edit">
+                                        <i class="fas fa-pen"></i>
+                                        Sửa
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                        <div class="box-checkout box-address list-address">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-back">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Chọn địa chỉ nhận hàng
+                                </div>
+                                <a href="@Url.Action("UserAddress", "Dashboard")" class="btn-new-address">
+                                    <i class="fal fa-plus-circle"></i>
+                                    Tạo địa chỉ mới
+                                </a>
+                            </div>
+                            @if (Model.Addresses.Any())
+                            {
+                                foreach (var item in Model.Addresses)
+                                {
+                                    <div class="address-item @if (item.Default == true) { @Html.Raw("default") }" data-id="@item.Id">
+                                        <label for="touch-@item.Id" onclick="defaultAddress('@item.Id')">
+                                            <input type="checkbox" id="touch-@item.Id" class="Default" @if (item.Default == false) { @Html.Raw("checked='checked'") }>
+                                            <span class="address-info">
+                                                <span class="address-bold">
+                                                    @item.Fullname <span>|</span> @item.Mobile
+                                                </span>
+                                                @item.SpecificAddress, @item.District.Name, @item.City.Name
+                                            </span>
+                                            <a href="@Url.Action("UpdateAddress", "Dashboard", new { addressId = item.Id })" class="btn-edit">
+                                                <i class="fas fa-pen"></i>
+                                                Sửa
+                                            </a>
+                                        </label>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                        
+                    }
+                    else
+                    {
+                        <div class="form-row">
+                            <div class="col-12 form-group">
+                                @Html.TextBoxFor(a => a.Order.CustomerInfo.Fullname, new { @placeholder = "Họ và tên", @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Fullname)
+                            </div>
+                            <div class="col-7 form-group">
+                                @Html.TextBoxFor(a => a.Order.CustomerInfo.Email, new { @placeholder = "Địa chỉ Email", @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Email)
+                            </div>
+                            <div class="col-5 form-group">
+                                @Html.TextBoxFor(a => a.Order.CustomerInfo.Mobile, new { @placeholder = "Số điện thoại", @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Mobile)
+                            </div>
+                            <div class="col-12 form-group">
+                                @Html.TextBoxFor(a => a.Order.CustomerInfo.Address, new { @placeholder = "Địa chỉ", @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Address)
+                            </div>
+                            <div class="col-4 form-group">
+                                @Html.DropDownListFor(a => a.CityId, Model.CitySelectList, "Tỉnh / Thành phố", new { @class = "form-control mb-lg-0 mm-md-0 mb-3", data_item = "city" })
+                                @Html.ValidationMessageFor(a => a.CityId)
+                            </div>
+                            <div class="col-4 form-group">
+                                @Html.DropDownListFor(a => a.DistrictId, Model.DistrictSelectList, "Quận / Huyện", new { @class = "form-control", data_item = "district" })
+                                @Html.ValidationMessageFor(a => a.DistrictId)
+                            </div>
+                            <div class="col-4 form-group">
+                                @Html.DropDownListFor(a => a.WardId, Model.WardSelectList, "Phường / Xã", new { @class = "form-control", data_item = "ward" })
+                                @Html.ValidationMessageFor(a => a.WardId)
+                            </div>
+                            <div class="col-12 form-group">
+                                <textarea class="form-control" name="Order.CustomerInfo.Body" rows="4" placeholder="Lời nhắn (nếu có)"></textarea>
+                            </div>
+                        </div>
+                    }
+                    <button type="submit" class="btnsubmit-cart mt-3">Hoàn tất đơn hàng</button>
+                }
+            </div>
+            <div class="col-lg-6 py-4">
+                @foreach (var item in Model.CartItems)
+                {
+                    var price = item.CartItems.Count * item.CartItems.Price;
+                    <div class="media item-card">
+                        <div class="media-thuml border">
+                            @if (item.CartItems.Product.ListImage != null)
+                            {
+                                <img class="align-self-center mr-3 lazyload" src="~/Content/images/img-main/base64.gif" data-src=@Path.Combine("/images/products/", item.CartItems.Product.ListImage.Split(',')[0]) alt="@item.CartItems.Product.Name">
+                            }
+                            else
+                            {
+                                <img class="align-self-center mr-3 lazyload" src="~/Content/images/img-main/on-image.jpg" alt="@item.CartItems.Product.Name">
+
+                            }
+                            <div class="cart-number">
+                                @item.CartItems.Count
+                            </div>
+                        </div>
+                        <div class="media-body ml-3">
+                            <div class="info-cart">
+                                <h5 class="mt-0">@item.CartItems.Product.Name</h5>
+                                <div class="quy-cach">
+                                   @item.CartItems.Product.Specifications
+                                </div>
+                            </div>
+                            <div class="cart-money">
+                                @if (price == 0)
+                                {
+                                    @: Liên hệ
+                                }
+                                else
+                                {
+                                    @Convert.ToDecimal(price).ToString("N0") @:đ
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                <hr />
+                <div class="d-flex justify-content-between total">
+                    <p>Tổng cộng:</p>
+                    <span> @final.ToString("N0") đ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval", "~/bundles/jqueryui")
+    <script>
+        checkOut();
+    </script>
+}

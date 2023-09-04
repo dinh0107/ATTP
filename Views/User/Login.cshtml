@@ -1,0 +1,46 @@
+﻿@model ATTP.ViewModel.UserLoginModel
+@{
+    ViewBag.Title = "Đăng nhập";
+}
+<section class="login">
+    @if (ViewBag.Result == "error")
+    {
+        <div id="AlertBox" class="error">
+            Vui lòng đăng nhập để thanh toán đơn hàng
+        </div>
+    }
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-lg-5 order-lg-1 order-0">
+                <div class="limiter">
+                    <div class="wrap-login100">
+                        <div class="title"><h2>Đăng nhập</h2></div>
+                        @using (Html.BeginForm())
+                        {
+                            @Html.ValidationSummary(true)
+                            <div class="input-group">
+                                <span class="user-name">Tài khoản</span>
+                                @Html.TextBoxFor(modelItem => modelItem.Username, new { @class = "form-control", placeholder = "Nhập tài khoản*" })
+                                @Html.ValidationMessageFor(modelItem => modelItem.Username)
+                            </div>
+                            <div class="input-group">
+                                <span class="user-name">Mật khẩu</span>
+                                @Html.PasswordFor(modelItem => modelItem.Password, new { @class = "form-control", placeholder = "Nhập mật khẩu*", autocomplete = "off" })
+                                @Html.ValidationMessageFor(modelItem => modelItem.Password)
+                            </div>
+                            <div class="text-center mt-lg-0 mt-3">
+                                <button type="submit" class="btn-form">
+                                    Đăng nhập
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

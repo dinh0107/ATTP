@@ -1,0 +1,71 @@
+﻿@model ATTP.Models.User
+@{
+    ViewBag.Title = "Thông tin cá nhân";
+}
+
+<section class="bg-second  mb-4">
+    <div class="container">
+        <div class="user-page">
+            <div class="w30">
+                @Html.Action("UserNav", "Dashboard")
+            </div>
+            <div class="w70">
+                <div class="user-box shadow rounded p-3">
+                    @if (ViewBag.Result == "success")
+                    {
+                        <div id="AlertBox" class="success">
+                            Cập nhật thông tin thành công
+                        </div>
+                    }            <div class="title-user">
+                        Thông tin cá nhân
+                    </div>
+                    <div class="sub-title-user">
+                        Vui lòng cập nhật thông tin đầy đủ
+                    </div>
+
+                    @using (Html.BeginForm("UserInfo", "Dashboard", FormMethod.Post, new { @class = "user-form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.ValidationSummary(true)
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Id)
+                        @Html.HiddenFor(m => m.Username)
+                        @Html.HiddenFor(m => m.Password)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.Avatar)
+                            @if (Model.Avatar != null)
+                            {
+                                <img src="@Path.Combine("/images/users/", Model.Avatar)" class="avatar" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/img-main/avatar.png"  class="avatar" />
+                            }
+                            @Html.TextBoxFor(m => m.Avatar, new { @class = "file-input", type = "file" })
+                        </div>
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.FullName)
+                            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.FullName)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.PhoneNumber)
+                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.PhoneNumber)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.Email)
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Email)
+                        <div class="input-group">
+                            <label></label>
+                            <button type="submit" class="btn-user">
+                                Lưu
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

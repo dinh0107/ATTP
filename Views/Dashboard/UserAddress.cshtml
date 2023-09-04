@@ -1,0 +1,185 @@
+﻿@model ATTP.ViewModel.AddressViewModel
+@{
+    ViewBag.Title = "Quản lý địa chỉ";
+    var userId = ViewContext.RouteData.Values["Id"];
+}
+<section class="bg-light">
+    <div class="container">
+        <div class="user-page bg-second py-3">
+            <div class="w30">
+                @Html.Action("UserNav", "Dashboard")
+            </div>
+            <div class="w70">
+                <div class="user-box user-address p-3 shadow">
+                    @if (ViewBag.Result == "success")
+                    {
+                        <div id="AlertBox" class="success">
+                            Thêm mới địa chỉ thành công
+                        </div>
+                    }
+                    @if (ViewBag.Result == "update")
+                    {
+                        <div id="AlertBox" class="success">
+                            Cập nhật địa chỉ thành công
+                        </div>
+                    }
+                    <div class="title-user">
+                        Quản lý địa chỉ nhận hàng
+                    </div>
+                    <div class="sub-title-user">
+                        Bạn có thể lựa chọn địa chỉ giao hàng mặc định của mình hoặc thêm địa chỉ mới khi đặt hàng tại ATTP
+                    </div>
+                    <div class="btn-address">
+                        Tạo địa chỉ mới
+                    </div>
+                    @if (Model.Addresses.Any())
+                    {
+                        <div class="address-list">
+                            @foreach (var item in Model.Addresses)
+                            {
+                                <div class="address-item" data-id="@item.Id">
+                                    <div class="row">
+                                        <div class="col-lg-10 col-md-10">
+                                            <div class="address-text">
+                                                <div class="address-label">
+                                                    Họ tên:
+                                                </div>
+                                                <div class="address-info">
+                                                    @item.Fullname
+                                                </div>
+                                            </div>
+                                            <div class="address-text">
+                                                <div class="address-label">
+                                                    Điện thoại:
+                                                </div>
+                                                <div class="address-info">
+                                                    @item.Mobile
+                                                </div>
+                                            </div>
+                                            <div class="address-text">
+                                                <div class="address-label">
+                                                    Địa chỉ cụ thể:
+                                                </div>
+                                                <div class="address-info">
+                                                    @item.SpecificAddress, @item.District.Name, @item.City.Name
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-2">
+                                            <div class="btn-box">
+                                                <a href="javascript:;" class="check-default">
+                                                    <label for="touch-@item.Id" onclick="defaultAddress('@item.Id')" class="btn-address-info not-default @if (item.Default == true) { @Html.Raw("btn-default") }">
+                                                        Mặc định
+                                                    </label>
+                                                    <input type="checkbox" id="touch-@item.Id" class="Default" @if (item.Default == false) { @Html.Raw("checked='checked'") }>
+                                                </a>
+                                                <a href="@Url.Action("UpdateAddress", "Dashboard", new { addressId = item.Id })" class="btn-address-info btn-edit">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                    Sửa
+                                                </a>
+                                                <a href="javascript:;" onclick="deleteAddress('@item.Id')" class="btn-address-info btn-delete">
+                                                    Xóa
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="user-box form-address p-3">
+                    <div class="title-user">
+                        Tạo địa chỉ mới
+                    </div>
+                    <div class="sub-title-user">
+                        Vui lòng nhập đầy đủ thông tin
+                    </div>
+                    @using (Html.BeginForm("UserAddress", "Dashboard", FormMethod.Post, new { @class = "user-form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.ValidationSummary(true)
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Address.UserId" value="@userId" />
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.Address.Fullname)
+                            @Html.TextBoxFor(m => m.Address.Fullname, new { @class = "form-control", placeholder = "Vui lòng cung cấp tên" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Address.Fullname)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.Address.Mobile)
+                            @Html.TextBoxFor(m => m.Address.Mobile, new { @class = "form-control", placeholder = "Vui lòng cung cấp số điện thoại" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Address.Mobile)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.CityId)
+                            @Html.DropDownListFor(m => m.CityId, Model.CitySelectList, "Chọn Tỉnh/Thành phố", new { @class = "form-control", data_item = "city" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.CityId)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.DistrictId)
+                            @Html.DropDownListFor(m => m.DistrictId, Model.DistrictSelectList, "Chọn Quận/Huyện", new { @class = "form-control", data_item = "district" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.DistrictId)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.Address.SpecificAddress)
+                            @Html.TextAreaFor(m => m.Address.SpecificAddress, new { @class = "form-control", rows = 4, placeholder = "Vui lòng nhập địa chỉ cụ thể" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Address.SpecificAddress)
+                        <div class="input-group">
+                            <label></label>
+                            <div class="close-form-address">
+                                Đóng
+                            </div>
+                            <button type="submit" class="btn-user">
+                                Lưu
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        userAddress()
+        function defaultAddress(id) {
+            var divId = $("div[data-id='" + id + "']");
+            var addressDefault = divId.find("input.Default").prop("checked");
+            var checkDefault = divId.find(".check-default label").hasClass('btn-default');
+
+            if (checkDefault == true) {
+                addressDefault = true;
+            }
+
+            $.post("/Dashboard/DefaultAddress", { addressId: id, addressDefault }, function (data) {
+                if (data) {
+                    location.reload();
+                }
+            });
+        }
+        function deleteAddress(id) {
+            if (confirm("Bạn có chắc chắn xóa địa chỉ này không?")) {
+                $.post("/Dashboard/DeleteAddress", { addressId: id }, function (data) {
+                    if (data) {
+                        $("div[data-id='" + id + "']").fadeOut();
+                        function reload() {
+                            location.reload();
+                        }
+                        setTimeout(reload, 500);
+                    }
+                    else {
+                        $.toast({
+                            text: 'Quá trình thực hiện không thành công. Hãy thử lại',
+                            icon: 'error',
+                        })
+                    }
+                });
+            }
+        }
+    </script>
+}

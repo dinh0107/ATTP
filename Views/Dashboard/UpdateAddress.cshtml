@@ -1,0 +1,81 @@
+﻿@model ATTP.ViewModel.AddressViewModel
+@{
+    ViewBag.Title = "Cập nhật địa chỉ";
+    var userId = ViewContext.RouteData.Values["Id"];
+}
+<div class="bg-light py-3">
+    <div class="container">
+        <div class="user-page bg-second">
+            <div class="w30">
+                @Html.Action("UserNav", "Dashboard")
+            </div>
+            <div class="w70">
+                <div class="user-box p-3 shadow">
+                    <div class="title-user">
+                        Sửa địa chỉ giao hàng
+                    </div>
+                    @using (Html.BeginForm("UpdateAddress", "Dashboard", FormMethod.Post, new { @class = "user-form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(m => m.Address.Id)
+
+                        <input type="hidden" name="Address.UserId" value="@userId" />
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.Address.Fullname)
+                            @Html.TextBoxFor(m => m.Address.Fullname, new { @class = "form-control", placeholder = "Vui lòng cung cấp tên" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Address.Fullname)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.Address.Mobile)
+                            @Html.TextBoxFor(m => m.Address.Mobile, new { @class = "form-control", placeholder = "Vui lòng cung cấp số điện thoại" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Address.Mobile)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.CityId)
+                            <select name="CityId" class="form-control" required="" data-item="city" data-val="true" data-val-required="Bạn hãy chọn Tỉnh/Thành phố">
+                                <option value="">Tỉnh/Thành phố</option>
+                                @foreach (var city in Model.Cities)
+                                {
+                                    <option value="@city.Id"
+                                            @if (city.Id == Model.Address.CityId) { @Html.Raw("selected='selected'") }>
+                                        @city.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.CityId)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.DistrictId)
+                            <select name="DistrictId" class="form-control" data-item="district" data-val="true" data-val-required="Bạn hãy chọn Quận/Huyện">
+                                <option value="">Chọn Quận/Huyện</option>
+                                @foreach (var district in Model.Districts)
+                                {
+                                    <option value="@district.Id"
+                                            @if (district.Id == Model.Address.DistrictId) { @Html.Raw("selected='selected'") }>
+                                        @district.Name
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        @Html.ValidationMessageFor(m => m.DistrictId)
+                        <div class="input-group">
+                            @Html.LabelFor(m => m.Address.SpecificAddress)
+                            @Html.TextAreaFor(m => m.Address.SpecificAddress, new { @class = "form-control", rows = 4, placeholder = "Vui lòng nhập địa chỉ cụ thể" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.Address.SpecificAddress)
+                        <div class="input-group">
+                            <label></label>
+                            <a href="@Url.Action("UserAddress")" class="close-form-address">
+                                Đóng
+                            </a>
+                            <button type="submit" class="btn-user">
+                                Lưu
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

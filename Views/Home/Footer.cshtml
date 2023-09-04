@@ -1,0 +1,139 @@
+﻿@model ATTP.ViewModel.FooterViewModel
+ @using ATTP.Models
+@{ 
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+<footer>
+    <div class="container">
+        <div class="row py-4">
+            <div class="col-lg-3">
+                <a href="/">
+                    @if (config.Image != null)
+                    {
+                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/configs/", config.Image)" alt="@config.Title" class="img-ft lazyload" />
+                    }
+                </a>
+                <div class="footer-title">
+                    @config.Title
+                </div>
+                <div class="info-footer">
+                    @Html.Raw(config.InfoFooter)
+                </div>
+                <ul class="ul-reset list-icon">
+                    <li>
+                        <a href="@config.Instagram" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="43" height="44" viewBox="0 0 43 44" fill="none">
+                                <g style="mix-blend-mode:multiply">
+                                    <rect x="0.5" y="0.735352" width="42" height="42" rx="21" stroke="#007740" />
+                                </g>
+                                <path d="M24.75 12.2354H17.25C13.7988 12.2354 11 15.0341 11 18.4854V25.9854C11 29.4366 13.7988 32.2354 17.25 32.2354H24.75C28.2013 32.2354 31 29.4366 31 25.9854V18.4854C31 15.0341 28.2013 12.2354 24.75 12.2354ZM29.125 25.9854C29.125 28.3979 27.1625 30.3604 24.75 30.3604H17.25C14.8375 30.3604 12.875 28.3979 12.875 25.9854V18.4854C12.875 16.0729 14.8375 14.1104 17.25 14.1104H24.75C27.1625 14.1104 29.125 16.0729 29.125 18.4854V25.9854Z" fill="#007740" />
+                                <path d="M21 17.2354C18.2387 17.2354 16 19.4741 16 22.2354C16 24.9966 18.2387 27.2354 21 27.2354C23.7613 27.2354 26 24.9966 26 22.2354C26 19.4741 23.7613 17.2354 21 17.2354ZM21 25.3604C19.2775 25.3604 17.875 23.9579 17.875 22.2354C17.875 20.5116 19.2775 19.1104 21 19.1104C22.7225 19.1104 24.125 20.5116 24.125 22.2354C24.125 23.9579 22.7225 25.3604 21 25.3604Z" fill="#007740" />
+                                <path d="M26.375 17.5266C26.743 17.5266 27.0413 17.2283 27.0413 16.8604C27.0413 16.4924 26.743 16.1941 26.375 16.1941C26.007 16.1941 25.7087 16.4924 25.7087 16.8604C25.7087 17.2283 26.007 17.5266 26.375 17.5266Z" fill="#007740" />
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@config" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="43" height="44" viewBox="0 0 43 44" fill="none">
+                                <g style="mix-blend-mode:multiply">
+                                    <rect x="0.5" y="0.735352" width="42" height="42" rx="21" stroke="#007740" />
+                                </g>
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M24.4228 12.2354C24.7512 15.0734 26.3276 16.7655 29.0685 16.9455V20.1376C27.4801 20.2936 26.0888 19.7716 24.4706 18.7876V24.7578C24.4706 32.342 16.2421 34.7121 12.934 29.2759C10.8082 25.7778 12.1099 19.6396 18.9292 19.3936V22.7597C18.4097 22.8437 17.8543 22.9757 17.3468 23.1497C15.8301 23.6657 14.9702 24.6318 15.209 26.3358C15.6688 29.5999 21.6282 30.5659 21.1326 24.1877V12.2414H24.4228V12.2354Z" fill="#007740" />
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@config.Twitter" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="43" height="44" viewBox="0 0 43 44" fill="none">
+                                <g style="mix-blend-mode:multiply">
+                                    <rect x="0.5" y="0.735352" width="42" height="42" rx="21" stroke="#007740" />
+                                </g>
+                                <path d="M31 16.1295C30.2563 16.4507 29.4637 16.6637 28.6375 16.767C29.4875 16.2674 30.1363 15.4821 30.4412 14.5357C29.6488 15.0009 28.7738 15.3295 27.8412 15.5129C27.0887 14.724 26.0162 14.2354 24.8462 14.2354C22.5763 14.2354 20.7487 16.0495 20.7487 18.2735C20.7487 18.5935 20.7762 18.9012 20.8438 19.1941C17.435 19.0304 14.4188 17.4218 12.3925 14.9714C12.0387 15.5757 11.8313 16.2674 11.8313 17.012C11.8313 18.4101 12.5625 19.6495 13.6525 20.367C12.9937 20.3547 12.3475 20.1664 11.8 19.8698C11.8 19.8821 11.8 19.8981 11.8 19.9141C11.8 21.876 13.2212 23.5055 15.085 23.8809C14.7512 23.9707 14.3875 24.0138 14.01 24.0138C13.7475 24.0138 13.4825 23.999 13.2337 23.9449C13.765 25.5437 15.2725 26.719 17.065 26.7572C15.67 27.8317 13.8988 28.479 11.9813 28.479C11.645 28.479 11.3225 28.4643 11 28.4237C12.8162 29.5769 14.9688 30.2354 17.29 30.2354C24.835 30.2354 28.96 24.0815 28.96 18.7474C28.96 18.5689 28.9538 18.3966 28.945 18.2255C29.7588 17.6569 30.4425 16.9467 31 16.1295Z" fill="#007740" />
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@config.Facebook" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="43" height="44" viewBox="0 0 43 44" fill="none">
+                                <g style="mix-blend-mode:multiply">
+                                    <rect x="0.5" y="0.735352" width="42" height="42" rx="21" stroke="#007740" />
+                                </g>
+                                <path d="M22.4688 19.1104V16.6104C22.4688 15.9204 22.9588 15.3604 23.5625 15.3604H24.6562V12.2354H22.4688C20.6564 12.2354 19.1875 13.9141 19.1875 15.9854V19.1104H17V22.2354H19.1875V32.2354H22.4688V22.2354H24.6562L25.75 19.1104H22.4688Z" fill="#007740" />
+                            </svg>
+                        </a>
+                    </li>
+                </ul>   
+            </div>
+            <div class="col-lg-9 mt-4">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="footer-title">
+                            Thông tin
+                        </div>
+                        <ul class="ul-reset menu-ft">
+                            <li><a href="@Url.Action("AllProduct")">Sản phẩm</a></li>
+                            @foreach (var item in Model.ArticleCategories.Where(a => a.TypePost == TypePost.Article))
+                            {
+                                <li><a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a></li>
+                            }
+                            <li><a href="@Url.Action("Contact")">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="footer-title">
+                            sản phẩm
+                        </div>
+                        <ul class="ul-reset menu-ft">
+                            @foreach (var item in Model.ArticleCategories.Where(a => a.TypePost == TypePost.Product))
+                            {
+                                <li><a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="footer-title">
+                            chính sách
+                        </div>
+                        <ul class="ul-reset menu-ft">
+                            @foreach (var item in Model.ArticleCategories.Where(a => a.TypePost == TypePost.Policy))
+                            {
+                                <li><a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="footer-title">
+                            fanpage
+                        </div>
+                        @if (config.Facebook != null)
+                        {
+                            <div class="embed-responsive mt-3">
+                                <div class="fb-page" data-href="@config.Facebook" data-tabs="" data-width="500" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+                                    <blockquote cite="@config.Facebook" class="fb-xfbml-parse-ignore">
+                                        <a href="@config.Facebook">@config.Title</a>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-lg-6">
+                        <div class="footer-title">
+                            đăng ký nhận bản tin
+                        </div>
+                        <form class="subscribe" id="form-subscribe">
+                            @Html.AntiForgeryToken()
+                            <input type="text" name="Email" placeholder="Nhập Email..." />
+                            <button type="submit">Gửi</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="copyright">
+        &copy; An Toàn Thực phẩm 2023. All rights reserved
+    </div>
+</footer>

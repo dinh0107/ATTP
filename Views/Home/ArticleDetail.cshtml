@@ -1,0 +1,101 @@
+﻿@model ATTP.ViewModel.ArticleDetailsViewModel
+@{
+    ViewBag.Title = Model.Article.TitleMeta ?? Model.Article.Subject;
+    ViewBag.Description = Model.Article.DescriptionMeta ?? Model.Article.Description;
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("ArticleDetail", new { url = Model.Article.Url });
+    if (Model.Article.Image != null)
+    {
+        ViewBag.ImageShare = Request.Url?.GetLeftPart(UriPartial.Authority) + Path.Combine("/images/articles/", Model.Article.Image);
+    }
+}
+<div class="banner-page">
+    <div class="banner-page__img">
+        <img src="~/Content/images/img-main/chi-tiet-bai-viet.jpg" alt=" ">
+    </div>
+    <div class="info-page">
+        <div class="container d-flex h-100 flex-column justify-content-center">
+            <div class="info-page__name">
+               @Model.Article.Subject
+            </div>
+            <div class="info-page_url text-white mt-1">
+                <a href="/" class="index-link mr-3">
+                    <img src="~/Content/images/img-main/icon-logo.png" alt="">
+                </a>
+                &gt;
+                <a href="" class="name-link ml-3">@Model.Article.Subject</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="detail-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 ">
+                <div class="bg-white rounded p-3 shadow">
+                    <div class="article-name">@Model.Article.Subject</div>
+                    <div class="date">
+                        <i class="fal fa-calendar-alt mr-1"></i>
+                        @Model.Article.CreateDate.ToString("dd/MM/yyyy")
+                    </div>
+                    <div class="sapo-detail">
+                        @Model.Article.Description
+                    </div>
+                    <div class="body-content mt-3">
+                        @Html.Raw(Model.Article.Body)
+                    </div>
+                    <hr />
+                    <div class="share">
+                        <ul class="d-flex align-items-center ul-reset">
+                            <li class="mr-3">Chia sẻ:</li>
+                            <li><button class="facebook" onclick="window.open('https://www.facebook.com/sharer.php?u='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/facebook.png" /></button></li>
+                            <li><button class="google-plus" onclick="window.open('https://myaccount.google.com/?url='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/google-plus.png" /></button></li>
+                            <li><button class="twitter" onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(location.href)+'&amp;text='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/twitter.png"></button></li>
+                            <li><button class="mess" onclick="window.open('https://www.messenger.com/?url='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/mess.png"></button></li>
+                            <li><button class="pinterest" onclick="window.open('https://www.pinterest.com/?url='+encodeURIComponent(location.href)+'&amp;t='+encodeURIComponent(document.title));return false"><img src="~/Content/images/img-main/pinterest.png"></button></li>
+                        </ul>
+                    </div>
+                    <hr />
+                    <div class="fb-comments" data-href="@ViewBag.Canonical" data-numposts="10" data-width="100%"></div>
+                </div>
+            </div>
+            <div class="col-lg-4 mt-lg-0 mt-3">
+                @if (Model.Articles.Any())
+                {
+                    <div class="title-cat">
+                        Bài viết mới nhất
+                    </div>
+                    <div class="box-border bg-white">
+                        <div class="recent-list">
+                            @foreach (var item in Model.Articles)
+                            {
+                                <div class="article-recent">
+                                    <div class="article-img">
+                                        <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                            @if (item.Image != null)
+                                            {
+                                                <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/articles/", item.Image)" alt="@item.Subject" class=" lazyload">
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Content/images/img-main/on-image.jpg"  alt="@item.Subject" class="lazyload">
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="body">
+                                        <a href="@Url.Action("ArticleDetail", new {url = item.Url})" class="subject">
+                                            @item.Subject
+                                        </a>
+                                        <div class="calendar">
+                                            <i class="fal fa-calendar-alt mr-1"></i>
+                                           @item.CreateDate.ToString("dd/MM/yyyy")
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>

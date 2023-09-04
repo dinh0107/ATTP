@@ -1,0 +1,134 @@
+﻿@model ATTP.ViewModel.ShoppingCartViewModel
+@{
+    ViewBag.Title = "Giỏ hàng của bạn";
+    var count = 0;
+}
+<link href="~/Content/jquery.nice-number.css" rel="stylesheet" />
+<link href="~/Content/sweetalert2.css" rel="stylesheet" />
+@if (Model.CartItems.Any())
+{
+    <div class="banner-page">
+        <div class="banner-page__img">
+            <img src="~/Content/images/img-main/gio-hang.jpg" alt="Giỏ hàng">
+        </div>
+        <div class="info-page">
+            <div class="container d-flex h-100 flex-column justify-content-center">
+                <div class="info-page__name">
+                    Giỏ hàng
+                </div>
+                <div class="info-page_url text-white mt-1">
+                    <a href="/" class="index-link mr-3">
+                        <img src="~/Content/images/img-main/icon-logo.png" alt="">
+                    </a>
+                    &gt;
+                    <a href="" class="name-link ml-3">Giỏ hàng</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<section class="container">
+    @if (!Model.CartItems.Any())
+    {
+        <div class="alert p-5 cart-empty">
+            <div class="text-center font-sm-14">
+                <img src="~/Content/images/shopping-cart.gif" class="img-fluid rounded m-auto" alt="Đơn hàng" /><br /><br />
+                Giỏ hàng của bạn đang trống. Hãy chọn sản phẩm!
+            </div>
+        </div>
+    }
+    else
+    {
+        using (Html.BeginForm())
+        {
+            <div class="my-cart shadow">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th class="text-xl-left" style="width: 25%">Thông tin sản phẩm</th>
+                            <th style="width: 10%">Số lượng</th>
+                            <th class="text-xl-right" style="width: 12%">Giá</th>
+                            <th class="text-xl-right" style="width: 12%">Thành tiền</th>
+                            <th class="text-xl-right" style="width: 8%"></th>
+                        </tr>
+                        @foreach (var item in Model.CartItems)
+                        {
+                            count++;
+                            var p = item.CartItems.Price ?? 0;
+                            var price = item.CartItems.Count * p;
+                            <tr data-row="@item.CartItems.RecordId">
+                                <td>
+                                    <div class="flex-item">
+                                        @if (item.CartItems.Product.ListImage != null)
+                                        {
+                                            <img data-src="@Path.Combine("/images/products/", item.CartItems.Product.ListImage.Split(',')[0])" src="~/Content/images/img-main/base64.gif" class="img-product lazyload" alt="@item.CartItems.Product.Name" />
+                                        }
+                                        <div class="product-name">
+                                            @item.CartItems.Product.Name
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="flex-item">
+                                        <input type="hidden" name="RecordId" value="@item.CartItems.RecordId" />
+                                        @*<input type="number" id="orderQuantity_@count" class="nice-number quantity form-control" name="Quantity" required="" min="1" max="999" value="@item.CartItems.Count">*@
+                                        <input type="number" id="orderQuantity_@count" id-value="@item.CartItems.RecordId" class="nice-number quantity form-control" name="Quantity" required="" min="1" max="999" value="@item.CartItems.Count">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="flex-reverse cart-price">
+                                        @if (p == 0)
+                                        {
+                                            <span>Liên hệ</span>
+                                        }
+                                        else
+                                        {
+                                            <span><b>@p.ToString("N0") đ</b> </span>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="flex-reverse" id="total" data-cart-item="@item.CartItems.RecordId">
+                                        @price.ToString("N0") đ
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="flex-reverse">
+                                        <a href="javascript:;" title="Xóa" class="remove-product" style="color: dimgray" data-id="@item.CartItems.RecordId">
+                                            <i class="fad fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <input type="hidden" value="@count" id="totalProduct" />
+                    <div class="sum border-top pt-1">Tổng cộng: <span id="finalTotal">@Model.CartTotal.ToString("N0") đ</span> </div>
+                </div>
+                <div class="my-lg-4 my-3 btn-continue">
+                    <a class="btn text-white mr-2 bg-danger" href="@Url.Action("EmptyCart")"><i class="fa fa-trash mr-1"></i>Hủy đơn hàng</a>
+                    <div class="btn-buy-update">
+                        <a class="btn btn-info mr-3" href="@Url.Action("AllProduct", "Home")"> <i class="fas fa-shopping-cart mr-1"></i> Tiếp tục mua sắm</a>
+                        <a href="@Url.Action("CheckOut")" class="btn btn-success"><i class="fa fa-check mr-1"></i>Thanh toán</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</section>
+@section scripts{
+    <script src="~/Scripts/jquery.nice-number.js"></script>
+    <script src="~/Scripts/sweetalert2.all.js"></script>
+    <script>
+        $('input[type="number"]').niceNumber({
+            autoSize: false,
+            onDecrement: function (input, number, object) {
+                UpdateToCard($(input).attr('id-value'), -1);
+                return false;
+            },
+            onIncrement: function (input, number, object) {
+                UpdateToCard($(input).attr('id-value'), 1); return false;
+            }
+        });
+    </script>
+}

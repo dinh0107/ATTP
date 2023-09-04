@@ -1,0 +1,28 @@
+﻿@model ATTP.ViewModel.ViewMemberViewModel
+<div class="container" style="min-height:50%;">
+    <div class="row">
+        @foreach (var item in Model.Members)
+        {
+            <div class="col-lg-4 col-md-4 col-12">
+                <div class="member-img">
+                    @if (item.Image != null)
+                    {
+                        <img src="@Path.Combine("/images/member/", item.Image)" alt="@item.Name" class="img-fluid" />
+                    }
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8 col-12">
+                <div class="member-name title">
+                    <p>@item.Name</p>
+                </div>
+                <div class="clastify">
+                    @item.Classify
+                </div>
+                <div class="info-member">
+                    @Html.Raw(item.Body)
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

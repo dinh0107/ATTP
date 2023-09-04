@@ -1,0 +1,29 @@
+﻿<div class="user-nav shadow rounded">
+    <a href="@Url.Action("UserInfo", "Dashboard")" class="user-nav-item">
+        <i class="fas fa-user"></i>
+        <span>
+            Thông tin cá nhân
+        </span>
+        <i class="fas fa-chevron-right"></i>
+    </a>
+    <a href="@Url.Action("UserAddress", "Dashboard")" class="user-nav-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <span>
+            Quản lý địa chỉ
+        </span>
+        <i class="fas fa-chevron-right"></i>
+    </a>
+    <a href="@Url.Action("UserOrder", "Dashboard")" class="user-nav-item">
+        <i class="fas fa-box"></i>
+        <span>
+            Đơn hàng của tôi
+        </span>
+        <i class="fas fa-chevron-right"></i>
+    </a>
+    <a href="@Url.Action("Logout", "User")" onclick="">
+        <i class="fas fa-sign-out"></i>
+        <span>
+            Đăng xuất
+        </span>
+    </a>
+</div>

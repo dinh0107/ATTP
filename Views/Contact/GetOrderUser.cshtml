@@ -1,0 +1,53 @@
+﻿@model  ATTP.ViewModel.LoadUserOrderViewModel
+    @{ 
+        var i = 1;
+    }
+<div class="load-order-view shadow-border">
+    <h2>Danh sách đơn hàng</h2>
+    <table class="list_table tablecenter table order-view">
+        <tr>
+            <th>STT</th>
+            <th>Hình ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>trạng thái</th>
+            <th>Giá</th>
+            <th>Thành tiền</th>
+        </tr>
+        @foreach (var detail in Model.Orders)
+        {
+            foreach (var item in detail.OrderDetails)
+            {
+                var sotien = item.Quantity * item.Price;
+                <tr>
+                    <td>1</td>
+                    <td><img class="img-fluid" src="@Path.Combine("/images/products/", item.Product.ListImage.Split(',')[0])?w=50" /></td>
+                    <td>@item.Product.Name</td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @switch (detail.Status)
+                        {
+                            case 0:
+                                @:Đang xử lý
+                                break;
+                            case 1:
+                                @:Đang giao hàng
+                                break;
+                            case 2:
+                                @:Đã giao hàng
+                                break;
+                            case 3:
+                                @:Hủy đơn
+                                break;
+                        }
+                    </td>
+                    <td>@Html.DisplayFor(a => item.Price) đ</td>
+                    <td>@Convert.ToDecimal(sotien).ToString("N0") đ</td>
+                </tr>
+                i++;
+            }
+        }
+    </table>
+</div>

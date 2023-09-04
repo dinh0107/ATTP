@@ -1,0 +1,76 @@
+﻿@model ATTP.ViewModel.CategoryProductViewModel
+@using ATTP.Models
+@{
+    ViewBag.Title = "Sản phẩm";
+    ViewBag.Canonical = Request.Url?.GetLeftPart(UriPartial.Authority) + Url.Action("AllProduct");
+    ViewBag.Robots = "noindex";
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+<div class="banner-page">
+    <div class="banner-page__img">
+        <img src="~/Content/images/img-main/banner-san-pham.jpg" alt="sản phẩm">
+    </div>
+    <div class="info-page">
+        <div class="container d-flex h-100 flex-column justify-content-center">
+            <div class="info-page__name">
+                Sản phẩm
+            </div>
+            <div class="info-page_url text-white mt-1">
+                <a href="/" class="index-link mr-3">
+                    <img src="~/Content/images/img-main/icon-logo.png" alt="giới thiệu">
+                </a>
+                &gt;
+                <a href="" class="name-link ml-3">Sản phẩm</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 order-lg-0 order-1">
+                <div class="box-filter border rounded">
+                    <div class="box-title">
+                        Bộ lọc sản phẩm
+                    </div>
+                    <input type="hidden" name="currentUrl" value="@Url.Action("AllProduct", "Home")" />
+                    <div class="search-product border rounded my-3">
+                        <input type="search" data-filter name="keywords" value="" placeholder="Tìm sản phẩm" />
+                        <i class="far fa-search"></i>
+                    </div>
+                    <div class="box-title">
+                        Sản phẩm
+                    </div>
+                    <div class="checkbox-list">
+                        <label>
+                            <input type="radio" data-filter name="catId" value="" checked />
+                            Tất cả sản phẩm
+                        </label>
+                        @foreach (var item in Model.Categories)
+                        {
+                            <label>
+                                <input type="radio" data-filter name="catId" value="@item.Id" />
+                                @item.CategoryName
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 order-lg-1 order-0">
+                <div class="row" id="list-item-sort">
+                    @Html.Action("GetProduct")
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        var radioButtons = $('.checkbox-list input[type="radio"]');
+        radioButtons.click(function () {
+            radioButtons.not(this).prop('checked', false);
+        });
+        Sort("Home/GetProduct")
+
+    </script>
+}
