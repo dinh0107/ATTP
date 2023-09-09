@@ -147,6 +147,7 @@ namespace ATTP.Controllers
                 category.CategoryActive = model.ProductCategory.CategoryActive;
                 category.ShowMenu = model.ProductCategory.ShowMenu;
                 category.ShowHome = model.ProductCategory.ShowHome;
+                category.ShowFooter = model.ProductCategory.ShowFooter;
                 category.TitleMeta = model.ProductCategory.TitleMeta;
                 category.DescriptionMeta = model.ProductCategory.DescriptionMeta;
                 category.Body = model.ProductCategory.Body;

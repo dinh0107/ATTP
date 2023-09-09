@@ -81,27 +81,27 @@
                                 }
                                 <div class="box-info">
                                     <div class="member-name">
-                                       @item.Name
+                                        @item.Name
                                     </div>
                                     <div class="member-classtify">
-                                       @item.Classify
+                                        @item.Classify
                                     </div>
                                     <a href="javascript:;" data-src="@Url.Action("ViewMember", new {id  = item.Id})" data-fancybox data-type="ajax" data-touch="false" rel="noindex" class="btn btn-block">Xem thêm ›</a>
                                 </div>
                             </div>
                         }
                     </div>
-                    
+
                 </div>
                 <div class="col-lg-8 d-flex align-items-center justify-content-end">
-                    <div class="list-member">
+                    <div class="list-member overflow-hidden">
                         @foreach (var item in Model.Members.Where(a => a.Right == false))
                         {
                             <div class="member-item">
                                 <div class="thuml">
                                     @if (item.Image != null)
                                     {
-                                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/member/", item.Image)" alt="@item.Name"  class="lazyload"/>
+                                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/member/", item.Image)" alt="@item.Name" class="lazyload" />
                                     }
                                     else
                                     {
@@ -164,58 +164,61 @@
         </div>
     </div>
 </section>
-<section class="discover">
-    <div class="container">
-        <div class="title text-center">
-            <h3>gia nhập với chúng tôi</h3>
-        </div>
-        <div class="row mt-3">
-            <div class="col-lg-6">
-                <div class="discover-album">
-                    @foreach (var item in Model.Banners.Where(a => a.GroupId == 7))
-                    {
-                        <div class="discover-album-img">
-                            <a data-fancybox href="@Path.Combine("/images/banners/", item.Image)">
-                                @if (item.Image != null)
-                                {
-                                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
-                                }
-                            </a>
-                        </div>
-                    }
+@if (Model.Articles.Any(a => a.ArticleCategory.TypePost == TypePost.Recruitment))
+{
+    <section class="discover">
+        <div class="container">
+            <div class="title text-center">
+                <h3>gia nhập với chúng tôi</h3>
+            </div>
+            <div class="row mt-3">
+                <div class="col-lg-6">
+                    <div class="discover-album overflow-hidden">
+                        @foreach (var item in Model.Articles.Where(a => a.ArticleCategory.TypePost == TypePost.Recruitment))
+                        {
+                            <div class="discover-album-img">
+                                <a href="@Url.Action("ArticleDetail", new {url = item.Url})">
+                                    @if (item.Image != null)
+                                    {
+                                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/articles/", item.Image)" alt="@item.Subject" class="lazyload" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/images/img-main/on-image.jpg" alt="@item.Subject" class="lazyload" />
+                                    }
+                                </a>
+                                <a class="recruitment-subject" href="@Url.Action("ArticleDetail", new {url = item.Url})">@item.Subject</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="list-about-article">
+                        @foreach (var item in Model.Articles.Where(a => a.ArticleCategory.TypePost == TypePost.Article))
+                        {
+                            <div class="about-article">
+                                <a href="@Url.Action("ArticleDetail", new {url = item.Url})" class="about-article__img">
+                                    @if (item.Image != null)
+                                    {
+                                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/articles/", item.Image)" alt="@item.Subject" class="lazyload" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/images/img-main/on-image.jpg" alt="@item.Subject" class="lazyload" />
+                                    }
+                                </a>
+                                <a href="@Url.Action("ArticleDetail", new {url = item.Url})" class="about-article__subject">
+                                    @item.Subject
+                                </a>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="video-discover">
-                    @foreach (var item in Model.Banners.Where(a => a.GroupId == 4))
-                    {
-                        <div class="video-discover__content">
-                            <a data-fancybox href="@item.Url">
-                                @if (item.Image != null)
-                                {
-                                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
-                                }
-                                <i class="fas fa-play-circle"></i>
-                            </a>
-                        </div>
-                    }
-                </div>
-                <div class="video-discover-nav">
-                    @foreach (var item in Model.Banners.Where(a => a.GroupId == 4))
-                    {
-                        <div class="video-discover-nav__item">
-                            @if (item.Image != null)
-                            {
-                                <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/banners/", item.Image)" alt="@item.BannerName" class="lazyload" />
+        </div>
+    </section>
+}
 
-                            }
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 @if (Model.Banners.Any(a => a.GroupId == 3))
 {
     <section class="parther overflow-hidden">
@@ -273,7 +276,7 @@
                                     @item.Name
                                 </div>
                                 <div class="feedback-slick__classtify">
-                                   @item.Classify
+                                    @item.Classify
                                 </div>
                             </div>
                         </div>

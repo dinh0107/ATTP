@@ -31,6 +31,8 @@ namespace ATTP.Models
         public bool Home { get; set; }
         [Display(Name = "Nổi bật")]
         public bool Hot { get; set; }
+        [Display(Name = "Hiện trang giới thiệu")]
+        public bool About { get; set; }
         [StringLength(300)]
         public string Url { get; set; }
         [Display(Name = "Thẻ tiêu đề"), StringLength(100, ErrorMessage = "Tối đa 100 ký tự"), UIHint("TextBox")]

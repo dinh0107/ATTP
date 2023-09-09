@@ -331,6 +331,7 @@ namespace ATTP.Controllers
                     article.Body = model.Article.Body;
                     article.Active = model.Article.Active;
                     article.Home = model.Article.Home;
+                    article.About = model.Article.About;
                     article.TitleMeta = model.Article.TitleMeta;
                     article.DescriptionMeta = model.Article.DescriptionMeta;
 

@@ -73,8 +73,8 @@ namespace ATTP.ViewModel
 
         public CheckOutViewModel()
         {
-            var selectTransport = new Dictionary<int, string> { { 1, "Đến địa chỉ người nhận" }, { 2, "Qua bưu điện" } };
-            var typePay = new Dictionary<int, string> { { 1, "Tiền mặt" }, { 2, "Chuyển khoản" }};
+            var selectTransport = new Dictionary<int, string> { { 1, "Thường" }, { 2, "Nhanh" } , { 3, "Hỏa tốc" } };
+            var typePay = new Dictionary<int, string> { { 1, "Thanh toán khi giao hàng (COD)" }, { 2,  "Chuyển khoản" } };
             var gender = new Dictionary<string, string> { { "Nam", "Nam" }, { "Nữ", "Nữ" } };
             SelectTransport = new SelectList(selectTransport, "Key", "Value");
             SelectTypePay = new SelectList(typePay, "Key", "Value");

@@ -242,6 +242,10 @@ namespace ATTP.Controllers
                     {
                         config.Favicon = imgFile;
                     }
+                    else if (Request.Files.Keys[i] == "QR")
+                    {
+                        config.QR = imgFile;
+                    }
                 }
 
                 config.Facebook = model.Facebook;
@@ -263,9 +267,9 @@ namespace ATTP.Controllers
                 config.Skype = model.Skype;
                 config.GooglePlus = model.GooglePlus;
                 config.TikTok = model.TikTok;
-                //config.NameBank = model.NameBank;
-                //config.UseBank = model.UseBank;
-                //config.NumberBank = model.NumberBank;
+                config.NameBank = model.NameBank;
+                config.UseBank = model.UseBank;
+                config.NumberBank = model.NumberBank;
                 config.Zalo = model.Zalo;
                 config.Hethong = model.Hethong;
                 //config.LinkMap = model.LinkMap;

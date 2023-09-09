@@ -106,7 +106,16 @@
 
                             }
                         </div>
-                        
+                        <div class="form-row mt-3">
+                            <div class="col-lg-6 col-md-6">
+                                @Html.DropDownListFor(model => model.Order.Transport, Model.SelectTransport, "Hình thức vận chuyển", new { @class = "form-control mb-lg-0 mm-md-0 mb-3 delivery-form" })
+                                @Html.ValidationMessageFor(a => a.Order.Transport)
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                @Html.DropDownListFor(model => model.Order.TypePay, Model.SelectTypePay, "Hình thức thanh toán", new { @class = "form-control mb-lg-0 mm-md-0 mb-3 typepay" })
+                                @Html.ValidationMessageFor(a => a.Order.TypePay)
+                            </div>
+                        </div>
                     }
                     else
                     {
@@ -123,10 +132,7 @@
                                 @Html.TextBoxFor(a => a.Order.CustomerInfo.Mobile, new { @placeholder = "Số điện thoại", @class = "form-control" })
                                 @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Mobile)
                             </div>
-                            <div class="col-12 form-group">
-                                @Html.TextBoxFor(a => a.Order.CustomerInfo.Address, new { @placeholder = "Địa chỉ", @class = "form-control" })
-                                @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Address)
-                            </div>
+
                             <div class="col-4 form-group">
                                 @Html.DropDownListFor(a => a.CityId, Model.CitySelectList, "Tỉnh / Thành phố", new { @class = "form-control mb-lg-0 mm-md-0 mb-3", data_item = "city" })
                                 @Html.ValidationMessageFor(a => a.CityId)
@@ -140,7 +146,19 @@
                                 @Html.ValidationMessageFor(a => a.WardId)
                             </div>
                             <div class="col-12 form-group">
+                                @Html.TextBoxFor(a => a.Order.CustomerInfo.Address, new { @placeholder = "Địa chỉ", @class = "form-control" })
+                                @Html.ValidationMessageFor(a => a.Order.CustomerInfo.Address)
+                            </div>
+                            <div class="col-12 form-group">
                                 <textarea class="form-control" name="Order.CustomerInfo.Body" rows="4" placeholder="Lời nhắn (nếu có)"></textarea>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                @Html.DropDownListFor(model => model.Order.Transport, Model.SelectTransport, "Hình thức vận chuyển", new { @class = "form-control mb-lg-0 mm-md-0 mb-3 delivery-form" })
+                                @Html.ValidationMessageFor(a => a.Order.Transport)
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                @Html.DropDownListFor(model => model.Order.TypePay, Model.SelectTypePay, "Hình thức thanh toán", new { @class = "form-control mb-lg-0 mm-md-0 mb-3 typepay" })
+                                @Html.ValidationMessageFor(a => a.Order.TypePay)
                             </div>
                         </div>
                     }
@@ -170,7 +188,7 @@
                             <div class="info-cart">
                                 <h5 class="mt-0">@item.CartItems.Product.Name</h5>
                                 <div class="quy-cach">
-                                   @item.CartItems.Product.Specifications
+                                    @item.CartItems.Product.Specifications
                                 </div>
                             </div>
                             <div class="cart-money">
@@ -195,10 +213,14 @@
         </div>
     </div>
 </section>
+@Html.Action("BankInfo")
+
 @section scripts
 {
     @Scripts.Render("~/bundles/jqueryval", "~/bundles/jqueryui")
+    <script type="text/javascript" src="https://milankyncl.github.io/jquery-copy-to-clipboard/jquery.copy-to-clipboard.js"></script>
     <script>
         checkOut();
+        $('.copy-link-button').CopyToClipboard();
     </script>
 }

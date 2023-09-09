@@ -162,6 +162,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202309080150168_update.cs" />
+    <Compile Include="Migrations\202309080150168_update.designer.cs">
+      <DependentUpon>202309080150168_update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202309080708291_configs.cs" />
+    <Compile Include="Migrations\202309080708291_configs.designer.cs">
+      <DependentUpon>202309080708291_configs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202309080800024_date.cs" />
+    <Compile Include="Migrations\202309080800024_date.designer.cs">
+      <DependentUpon>202309080800024_date.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202309090124577_update-article.cs" />
+    <Compile Include="Migrations\202309090124577_update-article.designer.cs">
+      <DependentUpon>202309090124577_update-article.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Admin.cs" />
@@ -1782,6 +1798,7 @@
     <Content Include="Views\Member\UpdateMember.cshtml" />
     <Content Include="Views\Home\ViewMember.cshtml" />
     <Content Include="Views\Home\DasboardReview.cshtml" />
+    <Content Include="Views\ShoppingCart\BankInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1796,6 +1813,20 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202309080150168_update.resx">
+      <DependentUpon>202309080150168_update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309080708291_configs.resx">
+      <DependentUpon>202309080708291_configs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309080800024_date.resx">
+      <DependentUpon>202309080800024_date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202309090124577_update-article.resx">
+      <DependentUpon>202309090124577_update-article.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -169,8 +169,8 @@ function AboutJs() {
         dots: false,
         speed: 800,
         autoplaySpeed: 2000,
-        prevArrow: '<button class="chevron-prev"><i class="fal fa-chevron-left"></i></button>',
-        nextArrow: '<button class="chevron-next"><i class="fal fa-chevron-right"></i></button>',
+        prevArrow: '<button class="chevron-prev"><i class="fal fa-chevron-left text-dark"></i></button>',
+        nextArrow: '<button class="chevron-next"><i class="fal fa-chevron-right text-dark"></i></button>',
     });
 
     $('.video-discover').slick({
@@ -740,3 +740,23 @@ function HidenMb() {
     $(".header-mb").removeClass("active");
     $(".overlay").removeClass(" active");
 }
+$(".typepay").change(function () {
+    var bankValue = $(".typepay").val()
+    if (bankValue == 2) {
+        $.fancybox.open({
+            src: "#dialog-content",
+            type: "inline"
+        });
+    }
+})
+$(window).scroll(function () {
+    if ($(this).scrollTop()) {
+        $('.backtotop').fadeIn();
+    } else {
+        $('.backtotop').fadeOut();
+    }
+});
+
+$(".backtotop").click(function () {
+    $("html, body").animate({ scrollTop: 0 }, 1000);
+});

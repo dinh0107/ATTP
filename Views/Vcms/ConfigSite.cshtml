@@ -60,18 +60,16 @@
         </tr>
     }
     <tr>
-        <td class="form_name">@Html.LabelFor(model => model.AboutText)</td>
-        <td class="form_text">@Html.EditorFor(model => model.AboutText)</td>
+        <td class="form_name">@Html.LabelFor(model => model.QR)</td>
+        <td class="form_text">@Html.TextBoxFor(model => model.QR, new { type = "file" })</td>
     </tr>
-
-    <tr>
-        <td class="form_name">@Html.LabelFor(model => model.Hethong)</td>
-        <td class="form_text">@Html.EditorFor(model => model.Hethong)</td>
-    </tr>
-    <tr>
-        <td class="form_name">@Html.LabelFor(model => model.AboutUrl)</td>
-        <td class="form_text">@Html.EditorFor(model => model.AboutUrl)</td>
-    </tr>
+    @if (Model.QR != null)
+    {
+        <tr>
+            <td class="form_name"></td>
+            <td class="form_text"><img class="img-border" src="@Path.Combine("/images/configs/", Model.QR)?w=150" /></td>
+        </tr>
+    }
     <tr>
         <td class="form_name">@Html.LabelFor(model => model.InfoContact)</td>
         <td class="form_text">@Html.EditorFor(model => model.InfoContact)</td>
@@ -80,18 +78,18 @@
         <td class="form_name">@Html.LabelFor(model => model.InfoFooter)</td>
         <td class="form_text">@Html.EditorFor(model => model.InfoFooter)</td>
     </tr>
-    @*<tr>
-            <td class="form_name">@Html.LabelFor(model => model.NameBank)</td>
-            <td class="form_text">@Html.EditorFor(model => model.NameBank)</td>
-        </tr>
-        <tr>
-            <td class="form_name">@Html.LabelFor(model => model.UseBank)</td>
-            <td class="form_text">@Html.EditorFor(model => model.UseBank)</td>
-        </tr>
-        <tr>
-            <td class="form_name">@Html.LabelFor(model => model.NumberBank)</td>
-            <td class="form_text">@Html.EditorFor(model => model.NumberBank)</td>
-        </tr>*@
+    <tr>
+        <td class="form_name">@Html.LabelFor(model => model.NameBank)</td>
+        <td class="form_text">@Html.EditorFor(model => model.NameBank)</td>
+    </tr>
+    <tr>
+        <td class="form_name">@Html.LabelFor(model => model.UseBank)</td>
+        <td class="form_text">@Html.EditorFor(model => model.UseBank)</td>
+    </tr>
+    <tr>
+        <td class="form_name">@Html.LabelFor(model => model.NumberBank)</td>
+        <td class="form_text">@Html.EditorFor(model => model.NumberBank)</td>
+    </tr>
     <tr>
         <td class="form_name">@Html.LabelFor(model => model.Place)</td>
         <td class="form_text">@Html.EditorFor(model => model.Place)</td>

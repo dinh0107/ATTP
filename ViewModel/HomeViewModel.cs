@@ -16,6 +16,7 @@ namespace ATTP.ViewModel
     public class FooterViewModel
     {
         public IEnumerable<ArticleCategory> ArticleCategories { get; set; }
+        public IEnumerable <ProductCategory> ProductCategories { get; set;}
     }
     public class HomeViewModel
     {
@@ -81,6 +82,7 @@ namespace ATTP.ViewModel
         public IEnumerable<Member> Members { get; set; }
         public IEnumerable<Question> Question { get; set; }
         public IEnumerable<Feedback> Feedbacks { get; set; }
+        public IEnumerable<Article> Articles { get; set; }
     }
     public class ReviewViewModel
     {

@@ -87,9 +87,11 @@ namespace ATTP.Controllers
         public PartialViewResult Footer()
         {
             var articleCat = ArticleCategories().Where(a => a.ShowFooter);
+            var productCat = ProductCategories().Where(a => a.ShowFooter);
             var model = new FooterViewModel
             {
-                ArticleCategories = articleCat
+                ArticleCategories = articleCat,
+                ProductCategories = productCat,
             };
             return PartialView(model);
         }
@@ -100,8 +102,10 @@ namespace ATTP.Controllers
             var member = _unitOfWork.MemberRepository.GetQuery(a => a.Active, o => o.OrderBy(a => a.Sort));
             var question = _unitOfWork.QuestionRepository.GetQuery(a => a.Active, o => o.OrderBy(a => a.Sort));
             var feedback = _unitOfWork.FeedbackRepository.GetQuery(a => a.Active, o => o.OrderBy(a => a.Sort));
+            var article = _unitOfWork.ArticleRepository.GetQuery(a => a.Active && a.About , o => o.OrderByDescending(a => a.CreateDate));
             var model = new AboutViewModel
             {
+                Articles = article,
                 Banners = banner,
                 Members = member,
                 Question = question,

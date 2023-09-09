@@ -2,17 +2,31 @@
 @{
     var i = 1;
     var typepay = "Chuyển khoản";
+    var transport = "Hình thức vận chuyển";
     switch (Model.Order.TypePay)
     {
         case 1:
-            typepay = "Tiền mặt";
-
+            typepay = "Thanh toán khi giao hàng (COD)";
             break;
         case 2:
             typepay = "Chuyển khoản";
             break;
     }
-}
+    switch (Model.Order.Transport)
+    {
+        case 1:
+            transport = "Thường";
+            break;
+
+        case 2:
+            transport = "Nhanh";
+            break;
+        case 3:
+
+            transport = "Hỏa tốc";
+            break;
+    }
+    }
 <style>
     .avatar-pro {
         width: 130px;
@@ -88,5 +102,9 @@
     <h2>Thanh toán</h2>
     <div class="box_content mt-0">
         <p class="mb-1">Hình thức thanh toán: <strong>@typepay</strong></p>
+    </div>
+    <h2>Hình thức vận chuyển</h2>
+    <div class="box_content mt-0">
+        <p class="mb-1">Hình thức vận chuyển: <strong>@transport</strong></p>
     </div>
 </div>

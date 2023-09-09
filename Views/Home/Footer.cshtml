@@ -1,12 +1,12 @@
 ﻿@model ATTP.ViewModel.FooterViewModel
- @using ATTP.Models
-@{ 
+@using ATTP.Models
+@{
     var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
 }
 <footer>
     <div class="container">
         <div class="row py-4">
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <a href="/">
                     @if (config.Image != null)
                     {
@@ -33,7 +33,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="@config" target="_blank">
+                        <a href="@config.TikTok" target="_blank">
                             <svg xmlns="http://www.w3.org/2000/svg" width="43" height="44" viewBox="0 0 43 44" fill="none">
                                 <g style="mix-blend-mode:multiply">
                                     <rect x="0.5" y="0.735352" width="42" height="42" rx="21" stroke="#007740" />
@@ -62,16 +62,16 @@
                             </svg>
                         </a>
                     </li>
-                </ul>   
+                </ul>
             </div>
-            <div class="col-lg-9 mt-4">
+            <div class="col-lg-8 mt-4">
                 <div class="row">
-                    <div class="col-lg-2">
+                    <div class="col-lg-4">
                         <div class="footer-title">
                             Thông tin
                         </div>
                         <ul class="ul-reset menu-ft">
-                            <li><a href="@Url.Action("AllProduct")">Sản phẩm</a></li>
+                            <li><a href="@Url.Action("About")">Về chúng tôi</a></li>
                             @foreach (var item in Model.ArticleCategories.Where(a => a.TypePost == TypePost.Article))
                             {
                                 <li><a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a></li>
@@ -79,18 +79,22 @@
                             <li><a href="@Url.Action("Contact")">Liên hệ</a></li>
                         </ul>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="footer-title">
                             sản phẩm
                         </div>
                         <ul class="ul-reset menu-ft">
+                            @foreach (var item in Model.ProductCategories)
+                            {
+                                <li><a href="@Url.Action("ProductCategory", new {url = item.Url})">@item.CategoryName</a></li>
+                            }
                             @foreach (var item in Model.ArticleCategories.Where(a => a.TypePost == TypePost.Product))
                             {
                                 <li><a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a></li>
                             }
                         </ul>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <div class="footer-title">
                             chính sách
                         </div>
@@ -100,21 +104,6 @@
                                 <li><a href="@Url.Action("ArticleCategory", new {url = item.Url})">@item.CategoryName</a></li>
                             }
                         </ul>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="footer-title">
-                            fanpage
-                        </div>
-                        @if (config.Facebook != null)
-                        {
-                            <div class="embed-responsive mt-3">
-                                <div class="fb-page" data-href="@config.Facebook" data-tabs="" data-width="500" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
-                                    <blockquote cite="@config.Facebook" class="fb-xfbml-parse-ignore">
-                                        <a href="@config.Facebook">@config.Title</a>
-                                    </blockquote>
-                                </div>
-                            </div>
-                        }
                     </div>
                 </div>
                 <div class="row mt-4">
@@ -128,12 +117,34 @@
                             <button type="submit">Gửi</button>
                         </form>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="d-flex align-items-center mt-3">
+                            @if (config.QR != null)
+                            {
+                                <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/configs/", config.QR)" class="qr-ft lazyload" />
+                            }
+                            <div class="qr-name">
+                                Quét mã QR để tải App ATTP
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>
-        
+
     </div>
     <div class="copyright">
         &copy; An Toàn Thực phẩm 2023. All rights reserved
     </div>
 </footer>
+@if (config.Zalo != null)
+{
+    <a href="@config.Zalo" target="_blank" class="zalo">
+        <img src="~/Content/images/img-main/zalo-logo.png" alt="Zalo" />
+    </a>
+}
+<a href="tel:@config.Hotline" class="suntory-alo-phone suntory-alo-green" id="suntory-alo-phoneIcon" style="left: 0; bottom: 0;"><div class="suntory-alo-ph-circle"></div><div class="suntory-alo-ph-circle-fill"></div><div class="suntory-alo-ph-img-circle"><i class="fal fa-phone-alt"></i></div><div class="tel"><p class="fone">@config.Hotline</p></div> </a>
+<div class="backtotop shadow">
+    <i class="fas fa-arrow-alt-up"></i>
+</div>

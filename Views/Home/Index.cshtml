@@ -55,7 +55,7 @@
             <div class="title-box">
                 best seller & yêu thích
             </div>
-            <div class="list-saler mt-4">
+            <div class="list-saler mt-4 overflow-hidden">
                 @foreach (var item in Model.ProductSaler)
                 {
                     <div class="card product-saler border-0">
@@ -111,7 +111,7 @@
                     <div class="title-box">
                         Sản phẩm @item.ProductCategory.CategoryName
                     </div>
-                    <div class="list-product mt-4">
+                    <div class="list-product mt-4 overflow-hidden">
                         @foreach (var product in item.Products)
                         {
                             <div class="card product">
@@ -126,28 +126,28 @@
                                             <img class="card-img-top lazyload" src="~/Content/images/img-main/on-image.jpg" alt="@product.Name">
                                         }
                                     </a>
-                                    @if (product.PriceSale > 0)
-                                    {
-                                        var percent = (decimal)product.PriceSale / (decimal)product.Price;
-                                        var discount = 100 - Math.Truncate(percent * 100);
-                                        <div class="discount">
-                                            -@discount%
-                                        </div>
-                                    }
-                                <div class="box-action">
-                                    <a href="@Url.Action("ProductDetail", new {url = product.Url})"><i class="far fa-eye"></i></a>
-                                    @if (product.Quantity > 0)
-                                    {
-                                        if (id != null)
+                                    
+                                    <div class="box-action">
+                                        @if (product.PriceSale > 0)
                                         {
-                                            <a href="javascript:;" onclick="addToCart(@product.Id, @id)"><i class="fas fa-cart-plus"></i></a>
+                                            var percent = (decimal)product.PriceSale / (decimal)product.Price;
+                                            var discount = 100 - Math.Truncate(percent * 100);
+                                            <div class="discount">
+                                                -@discount%
+                                            </div>
                                         }
-                                        else
+                                        @if (product.Quantity > 0)
                                         {
-                                            <a href="javascript:;" onclick="addToCart(@product.Id)"><i class="fas fa-cart-plus"></i></a>
+                                            if (id != null)
+                                            {
+                                                <a href="javascript:;" onclick="addToCart(@product.Id, @id)"><i class="fas fa-cart-plus"></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a href="javascript:;" onclick="addToCart(@product.Id)"><i class="fas fa-cart-plus"></i></a>
+                                            }
                                         }
-                                    }
-                                </div>
+                                    </div>
                                 </div>
                                 <div class="card-body p-3 mt-2">
                                     <a href="@Url.Action("ProductDetail", new {url = product.Url})" class="card-title">@product.Name</a>

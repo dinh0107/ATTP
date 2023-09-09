@@ -52,5 +52,7 @@ namespace ATTP.Models
         Product,
         [Display(Name = "Chính sách")]
         Policy,
+        [Display(Name = "Tuyển dụng")]
+        Recruitment,
     }
 }

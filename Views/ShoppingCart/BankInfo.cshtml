@@ -1,0 +1,47 @@
+﻿@using ATTP.Models
+@{
+    var config = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+}
+<div class="bank-info" id="dialog-content" style="display:none;width:500px;">
+    <div class="form-group">
+        <label class="control-label font-weight-bold">
+            Tên ngân hàng
+        </label>
+        <div class="copy-link">
+            <input type="text" data-clipboard-text="@config.NameBank" class="copy-link-input" value="@config.NameBank" readonly>
+            <button type="button" class="copy-link-button" data-clipboard-text="@config.NameBank">
+                <span class="material-icons">Sao chép</span>
+            </button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label font-weight-bold">
+            Tên người nhận thanh toán
+        </label>
+        <div class="copy-link">
+            <input type="text" class="copy-link-input" data-clipboard-text="@config.UseBank" value="@config.UseBank" readonly>
+            <button type="button" class="copy-link-button" data-clipboard-text="@config.UseBank">
+                <span class="material-icons">Sao chép</span>
+            </button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label font-weight-bold">
+            Số tài khoản
+        </label>
+        <div class="copy-link">
+            <input type="text" class="copy-link-input" data-clipboard-text="@config.NumberBank" value="@config.NumberBank" readonly>
+            <button type="button" class="copy-link-button" data-clipboard-text="@config.NumberBank">
+                <span class="material-icons">Sao chép</span>
+            </button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label font-weight-bold">
+            Nội dung vui lòng điền:
+        </label>
+        <div class="copy-link">
+            <input type="text" class="copy-link-input" value="Họ tên + Email mua hàng" readonly>
+        </div>
+    </div>
+</div>

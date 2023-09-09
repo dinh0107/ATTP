@@ -1,11 +1,35 @@
-﻿@using ATTP.Models
+﻿@model ATTP.Models.Order
+@using ATTP.Models
 @{
     ViewBag.Title = "Đặt hàng thành công";
     var configsite = (ConfigSite)HttpContext.Current.Application["ConfigSite"];
+    var typepay = "Hình thức thanh toán";
+    var transport = "Hình thức vận chuyển";
+    switch (Model.TypePay)
+    {
+        case 1:
+            typepay = "Thanh toán khi giao hàng (COD)";
+            break;
+        case 2:
+            typepay = "Chuyển khoản";
+            break;
+    }
+    switch (Model.Transport)
+    {
+        case 1:
+            transport = "Thường";
+            break;
+        case 2:
+            transport = "Nhanh";
+            break;
+        case 3:
+            transport = "Hỏa tốc";
+            break;
+    }
 }
 <div class="container py-5">
     <div class="row">
-        <div class="col">
+        <div class="col-lg-6 border-right">
             <div class="success-message">
                 <svg viewBox="0 0 76 76" class="success-message__icon icon-checkmark">
                     <circle cx="38" cy="38" r="36" />
@@ -13,51 +37,100 @@
                 </svg>
                 <h1 class="success-message__title">Đặt hàng thành công</h1>
                 <div class="success-message__content">
-                    <p> Mã đơn hàng : <strong>@ViewBag.OrderId</strong></p>
+                    <p> Mã đơn hàng : <strong>@Model.MaDonHang</strong></p>
                 </div>
             </div>
-        </div>
-        <div class="col-12 d-flex flex-column align-items-center">
-            <div class="mb-3 text-center">
-                <p>Chúng tôi sẽ liên hệ với bạn nay sau khi nhận được đơn đặt hàng này</p>
-                <span>Mọi thắc mắc xin vui lòng liên hệ hotline: 0369109466</span>
+            <div class="border p-3">
+                Thông tin giao hàng
+                <div class="order-info">@Model.CustomerInfo.Fullname</div>
+                <div class="order-info">@Model.CustomerInfo.Mobile</div>
+                <div class="order-info">@Model.CustomerInfo.Address</div>
+                <div class="order-info">Phương thức thanh toán: </div>
+                <strong>@typepay</strong>
+                <br />
+                <div div class="order-info">Hình thức vận chuyển: </div>
+                <strong>@transport</strong>
             </div>
-            <a href="/" class="btn btn-primary">Tiếp tục mua sắm</a>
+        </div>
+        <div class="col-lg-6">
+            @foreach (var item in Model.OrderDetails)
+            {
+                var price = item.Quantity * item.Price;
+                <div class="media item-card">
+                    <div class="media-thuml border">
+                        @if (item.Product.ListImage != null)
+                        {
+                            <img class="align-self-center mr-3 lazyload" src="~/Content/images/img-main/base64.gif" data-src=@Path.Combine("/images/products/", item.Product.ListImage.Split(',')[0]) alt="@item.Product.Name">
+                        }
+                        else
+                        {
+                            <img class="align-self-center mr-3 lazyload" src="~/Content/images/img-main/on-image.jpg" alt="@item.Product.Name">
+
+                        }
+                        <div class="cart-number">
+                            @item.Quantity
+                        </div>
+                    </div>
+                    <div class="media-body ml-3">
+                        <div class="info-cart">
+                            <h5 class="mt-0">@item.Product.Name</h5>
+                            <div class="quy-cach">
+                                @item.Product.Specifications
+                            </div>
+                        </div>
+                        <div class="cart-money">
+                            @if (price == 0)
+                            {
+                                @: Liên hệ
+                            }
+                            else
+                            {
+                                @Convert.ToDecimal(price).ToString("N0") @:đ
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            <hr />
+            <div class="d-flex justify-content-between total">
+                <p>Tổng cộng:</p>
+                <span>@Model.TotalFee().ToString("N0")đ</span>
+            </div>
         </div>
     </div>
 </div>
 <script>
     function PathLoader(el) {
-    this.el = el;
-    this.strokeLength = el.getTotalLength();
+        this.el = el;
+        this.strokeLength = el.getTotalLength();
 
-    // set dash offset to 0
-    this.el.style.strokeDasharray =
-        this.el.style.strokeDashoffset = this.strokeLength;
-}
+        // set dash offset to 0
+        this.el.style.strokeDasharray =
+            this.el.style.strokeDashoffset = this.strokeLength;
+    }
 
-PathLoader.prototype._draw = function (val) {
-    this.el.style.strokeDashoffset = this.strokeLength * (1 - val);
-}
+    PathLoader.prototype._draw = function (val) {
+        this.el.style.strokeDashoffset = this.strokeLength * (1 - val);
+    }
 
-PathLoader.prototype.setProgress = function (val, cb) {
-    this._draw(val);
-    if (cb && typeof cb === 'function') cb();
-}
+    PathLoader.prototype.setProgress = function (val, cb) {
+        this._draw(val);
+        if (cb && typeof cb === 'function') cb();
+    }
 
-PathLoader.prototype.setProgressFn = function (fn) {
-    if (typeof fn === 'function') fn(this);
-}
+    PathLoader.prototype.setProgressFn = function (fn) {
+        if (typeof fn === 'function') fn(this);
+    }
 
-var body = document.body,
-    svg = document.querySelector('svg path');
+    var body = document.body,
+        svg = document.querySelector('svg path');
 
-if (svg !== null) {
-    svg = new PathLoader(svg);
+    if (svg !== null) {
+        svg = new PathLoader(svg);
 
-    setTimeout(function () {
-        document.body.classList.add('active');
-        svg.setProgress(1);
-    }, 200);
-}
+        setTimeout(function () {
+            document.body.classList.add('active');
+            svg.setProgress(1);
+        }, 200);
+    }
 </script>

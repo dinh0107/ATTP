@@ -39,6 +39,8 @@ namespace ATTP.Models
         public string Image { get; set; }
         [Display(Name = "Favicon"), UIHint("ImageConfig")]
         public string Favicon { get; set; }
+        [Display(Name = "QR tải app"), UIHint("ImageConfig")]
+        public string QR { get; set; }
         [StringLength(4000, ErrorMessage = "Tối đa 4000 ký tự"), Display(Name = "Mã Google Map"), UIHint("TextArea")]
         public string GoogleMap { get; set; }
         [StringLength(4000, ErrorMessage = "Tối đa 4000 ký tự"), Display(Name = "Mã Google Analytics"), UIHint("TextArea")]
@@ -69,5 +71,11 @@ namespace ATTP.Models
         public string InfoContact { get; set; }
         [Display(Name = "Thông tin chân trang"), UIHint("EditorBox")]
         public string InfoFooter { get; set; }
+        [Display(Name = "Tên ngân hàng"), StringLength(200, ErrorMessage = "Tối đa 200 ký tự"), UIHint("TextBox")]
+        public string NameBank { get; set; }
+        [Display(Name = "Chủ tài khoản"), StringLength(200, ErrorMessage = "Tối đa 200 ký tự"), UIHint("TextBox")]
+        public string UseBank { get; set; }
+        [Display(Name = "Số tài khoản"), StringLength(200, ErrorMessage = "Tối đa 200 ký tự"), UIHint("TextBox")]
+        public string NumberBank { get; set; }
     }
 }

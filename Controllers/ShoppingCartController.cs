@@ -213,8 +213,7 @@ namespace BepSaoViet.Controllers
                 sb += "</table>";
                 sb += "<p>Cảm ơn bạn đã tin tưởng và mua hàng của chúng tôi.</p>";
 
-                var orderId = DateTime.Now.ToString("yyMMddHHmmss");
-
+                var orderId = model.Order.Id;
                 Task.Run(() =>
                 {
                     HtmlHelpers.SendEmail("gmail", "[" + orderId + "] Đơn đặt hàng từ website " + Request.Url?.Host, sb,
@@ -227,11 +226,16 @@ namespace BepSaoViet.Controllers
         }
 
         [Route("thanh-toan-thanh-cong")]
-        public ActionResult CheckOutComplete(string orderId)
+        public ActionResult CheckOutComplete(int orderId)
         {
             EmptyCart();
-            ViewBag.OrderId = orderId;
-            return View();
+            var order = _unitOfWork.OrderRepository.GetById(orderId);
+            if (order == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(order);
         }
 
         public ActionResult EmptyCart()
@@ -362,6 +366,10 @@ namespace BepSaoViet.Controllers
                     Msg = "Cập nhật không thành công",
                 });
             }
+        }
+        public PartialViewResult BankInfo()
+        {
+            return PartialView();
         }
         protected override void Dispose(bool disposing)
         {

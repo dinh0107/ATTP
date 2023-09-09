@@ -35,6 +35,8 @@ namespace ATTP.Models
         public int? ParentId { get; set; }
         [Display(Name = "Hiển thị menu")]
         public bool ShowMenu { get; set; }
+        [Display(Name = "Hiển thị chân trang")]
+        public bool ShowFooter { get; set; }
         [Display(Name = "Bộ lọc")]
         public bool Filter { get; set; }
         [Display(Name = "Hiển thị trang chủ")]
