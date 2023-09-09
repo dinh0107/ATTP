@@ -1239,10 +1239,10 @@ footer .copyright {
   border-radius: 50%;
 }
 .discover .discover-album .chevron-next {
-  right: -3%;
+  right: 0;
 }
 .discover .discover-album .chevron-prev {
-  left: -3%;
+  left: 0;
 }
 .discover .discover-album .discover-album-img {
   position: relative;
@@ -1254,10 +1254,7 @@ footer .copyright {
   width: 100%;
   text-align: center;
   padding: 5px 10px;
-  position: absolute;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5607843137);
-  color: #fff;
+  color: #000;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -1268,7 +1265,7 @@ footer .copyright {
 .discover .discover-album .discover-album-img img {
   width: 100%;
   object-fit: cover;
-  aspect-ratio: 7/6;
+  aspect-ratio: 7/4;
   border-radius: 5px;
 }
 .discover .video-discover .video-discover__content {
@@ -1319,32 +1316,43 @@ footer .copyright {
 }
 .discover .list-about-article {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   grid-gap: 20px;
 }
 .discover .list-about-article .about-article {
   text-align: center;
+  position: relative;
 }
 .discover .list-about-article .about-article img {
   width: 100%;
   object-fit: cover;
+  border-radius: 5px;
+  aspect-ratio: 5/3;
 }
 .discover .list-about-article .about-article__subject {
-  margin-top: 10px;
   font-family: "Roboto-Medium";
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
   -webkit-line-clamp: 2;
-  height: 48px;
+  height: 50px;
+  position: absolute;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5607843137);
+  width: 100%;
+  border-radius: 0 0 5px 5px;
+  color: #fff;
+  padding: 10px;
+  line-height: 20px;
+  font-size: 14px;
 }
 .discover .list-about-article .about-article:first-child {
   grid-column: span 2;
   grid-row: span 2;
 }
 .discover .list-about-article .about-article:first-child img {
-  aspect-ratio: 5/2;
+  aspect-ratio: 5/3;
 }
 
 .parther {
@@ -3535,7 +3543,7 @@ footer .copyright {
     display: block;
   }
   .discover .list-about-article .about-article {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
   .discover .list-about-article .about-article img {
     aspect-ratio: 5/3;

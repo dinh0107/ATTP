@@ -194,9 +194,9 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="list-about-article">
-                        @foreach (var item in Model.Articles.Where(a => a.ArticleCategory.TypePost == TypePost.Article))
+                        @foreach (var item in Model.Articles.Where(a => a.ArticleCategory.TypePost != TypePost.Recruitment))
                         {
-                            <div class="about-article">
+                            <div class="about-article shadow ">
                                 <a href="@Url.Action("ArticleDetail", new {url = item.Url})" class="about-article__img">
                                     @if (item.Image != null)
                                     {

@@ -164,7 +164,7 @@ function AboutJs() {
     $('.discover-album').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
-        autoplay: true,
+        autoplay: false,
         arrows: true,
         dots: false,
         speed: 800,
