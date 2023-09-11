@@ -227,7 +227,7 @@
                             <ul>
                                 @foreach (var child in Model.ArticleCategories.Where(a => a.ParentId == null))
                                 {
-                                    <li class="p-2"><a class="mx-4" href="@Url.Action("ArticleCategory  ", new {url = child.Url})">@child.CategoryName</a></li>
+                                    <li class="p-2"><a class="mx-4" href="@Url.Action("ArticleCategory", new {url = child.Url})">@child.CategoryName</a></li>
                                 }
                             </ul>
                         }
