@@ -1,16 +1,13 @@
-﻿using Helpers;
+﻿using ATTP.DAL;
+using ATTP.Models;
+using ATTP.ViewModel;
+using Helpers;
 using PagedList;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using ATTP.DAL;
-using ATTP.Models;
-using ATTP.ViewModel;
-using System.Data.Entity;
 
 namespace ATTP.Controllers
 {
@@ -81,6 +78,7 @@ namespace ATTP.Controllers
             return true;
         }
         #endregion
+
         #region Feedback
         public ActionResult ListFeedback(int? page, string name, string result = "")
         {
@@ -227,6 +225,7 @@ namespace ATTP.Controllers
             return true;
         }
         #endregion
+
         #region Question
         public ActionResult ListQuestion(int? page, string name, string result = "")
         {
@@ -311,14 +310,13 @@ namespace ATTP.Controllers
         }
         #endregion
 
-
         #region User
         public ActionResult ListUser(int? page, string email, string result = "")
         {
             ViewBag.Result = result;
             var pageNumber = page ?? 1;
             const int pageSize = 10;
-            var user = _unitOfWork.UserRepository.Get(orderBy: l => l.OrderBy(a => a.CreateDate));
+            var user = _unitOfWork.UserRepository.GetQuery(orderBy: l => l.OrderBy(a => a.CreateDate));
             var model = new ListUserViewModel
             {
                 Users = user.ToPagedList(pageNumber, pageSize),
@@ -351,6 +349,7 @@ namespace ATTP.Controllers
             return PartialView(model);
         }
         #endregion
+
         protected override void Dispose(bool disposing)
         {
             _unitOfWork.Dispose();

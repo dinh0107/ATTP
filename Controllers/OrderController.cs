@@ -1,15 +1,12 @@
-﻿using PagedList;
+﻿using ATTP.DAL;
+using ATTP.ViewModel;
+using PagedList;
 using System;
 using System.Data;
 using System.Data.Entity;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
-using ATTP.DAL;
-using ATTP.Models;
-using ATTP.ViewModel;
 
 namespace ATTP.Controllers
 {
@@ -104,20 +101,16 @@ namespace ATTP.Controllers
 
         public ActionResult ReportProduct(int? page, int? cityId, string fromDate, string toDate, int? status = 2)
         {
-            var orderDetails = _unitOfWork.OrderDetailRepository.GetQuery();
+            var orderDetails = _unitOfWork.OrderDetailRepository.GetQuery(a => a.Order.Status == status);
 
-            if (status.HasValue)
-            {
-                orderDetails = orderDetails.Where(a => a.Order.Status == status);
-            }
+            //if (status.HasValue)
+            //{
+            //    orderDetails = orderDetails.Where(a => a.Order.Status == status);
+            //}
             if (cityId.HasValue)
             {
                 orderDetails = orderDetails.Where(a => a.Order.CityId == cityId);
             }
-
-            var products = _unitOfWork.ProductRepository.GetQuery();
-
-
             // from date
             if (DateTime.TryParse(fromDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var fd))
             {
@@ -130,10 +123,10 @@ namespace ATTP.Controllers
                 orderDetails = orderDetails.Where(a => DbFunctions.TruncateTime(a.Order.CreateDate) <= DbFunctions.TruncateTime(td));
             }
 
-            var groups = orderDetails.GroupBy(a => new { a.ProductId }).Select(a => new ReportProductViewModel.ReportProductItem
+            var groups = orderDetails.GroupBy(a => new { a.Product }).Select(a => new ReportProductViewModel.ReportProductItem
             {
                 TotalSale = a.Sum(c => c.Quantity),
-                Product = products.FirstOrDefault(s => s.Id == a.Key.ProductId),
+                Product = a.Key.Product
             });
 
             var pageNumber = page ?? 1;
@@ -146,6 +139,44 @@ namespace ATTP.Controllers
                 ToDate = toDate,
                 Status = status,
                 ReportProductItems = groups.OrderBy(a => a.Product.Sort).ToPagedList(pageNumber, 50)
+            };
+
+            return View(model);
+        }
+
+        public ActionResult ReportOrder(int? page, int? cityId, string fromDate, string toDate, int? status = 2)
+        {
+            var orders = _unitOfWork.OrderRepository.GetQuery(a => a.Status == status, q => q.OrderByDescending(a => a.Id));
+
+            if (status.HasValue)
+            {
+                orders = orders.Where(a => a.Status == status);
+            }
+            if (cityId.HasValue)
+            {
+                orders = orders.Where(a => a.CityId == cityId);
+            }
+            if (DateTime.TryParse(fromDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var fd))
+            {
+                orders = orders.Where(a =>
+                    DbFunctions.TruncateTime(a.CreateDate) >= DbFunctions.TruncateTime(fd));
+            }
+            if (DateTime.TryParse(toDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var td))
+            {
+                orders = orders.Where(a => DbFunctions.TruncateTime(a.CreateDate) <= DbFunctions.TruncateTime(td));
+            }
+
+            var pageNumber = page ?? 1;
+
+            var model = new ReportOrderViewModel
+            {
+                CityId = cityId,
+                CitySelectList = new SelectList(_unitOfWork.CityRepository.Get(a => a.Active, q => q.OrderBy(a => a.Sort)), "Id", "Name"),
+                FromDate = fromDate,
+                ToDate = toDate,
+                Status = status,
+                Orders = orders.ToPagedList(pageNumber, 50),
+                TotalAmount = orders.Sum(c => c.OrderDetails.Sum(d => d.Quantity * d.Price)) ?? 0m
             };
 
             return View(model);

@@ -1,11 +1,8 @@
-﻿using PagedList;
-using System;
+﻿using ATTP.Models;
+using PagedList;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using ATTP.Models;
 
 namespace ATTP.ViewModel
 {
@@ -76,5 +73,15 @@ namespace ATTP.ViewModel
             public Product Product { get; set; }
             public int TotalSale { get; set; }
         }
+    }
+    public class ReportOrderViewModel
+    {
+        public string FromDate { get; set; }
+        public string ToDate { get; set; }
+        public int? Status { get; set; }
+        public IPagedList<Order> Orders { get; set; }
+        public int? CityId { get; set; }
+        public SelectList CitySelectList { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 }

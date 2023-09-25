@@ -1,5 +1,4 @@
-﻿using ATTP.Controllers;
-using ATTP.DAL;
+﻿using ATTP.Filters;
 using ATTP.Models;
 using ATTP.ViewModel;
 using Helpers;
@@ -8,11 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.Mvc;
-using System.Collections.Generic;
-using System.Web;
-using ATTP.Filters;
 
-namespace BepSaoViet.Controllers
+namespace ATTP.Controllers
 {
     [RoutePrefix("gio-hang"), MemberLoginFilter]
     public class ShoppingCartController : BaseController

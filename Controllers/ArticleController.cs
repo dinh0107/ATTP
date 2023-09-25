@@ -1,16 +1,15 @@
-﻿using Helpers;
+﻿using ATTP.DAL;
+using ATTP.Models;
+using ATTP.ViewModel;
+using Helpers;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using System.Data.Entity;
-using ATTP.DAL;
-using ATTP.Models;
-using ATTP.ViewModel;
-using Newtonsoft.Json;
 
 namespace ATTP.Controllers
 {

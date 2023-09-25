@@ -676,6 +676,8 @@
     <Content Include="Views\Home\ViewMember.cshtml" />
     <Content Include="Views\Home\DasboardReview.cshtml" />
     <Content Include="Views\ShoppingCart\BankInfo.cshtml" />
+    <Content Include="Views\Order\ReportOrder.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DisplayOrderStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

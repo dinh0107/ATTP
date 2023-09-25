@@ -1,12 +1,12 @@
-﻿using Helpers;
+﻿using ATTP.DAL;
+using ATTP.Models;
+using ATTP.ViewModel;
+using Helpers;
+using PagedList;
 using System;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using PagedList;
-using ATTP.DAL;
-using ATTP.Models;
-using ATTP.ViewModel;
 
 namespace ATTP.Controllers
 {

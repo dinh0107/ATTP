@@ -1,19 +1,19 @@
 ﻿using ATTP.DAL;
+using ATTP.Models;
 using ATTP.ViewModel;
 using Helpers;
+using PagedList;
 using System;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using PagedList;
-using ATTP.Models;
-using System.Xml.Linq;
 
 namespace ATTP.Controllers
 {
     public class MemberController : Controller
     {
         private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+
         #region Member
         public ActionResult ListMember(int? page, string name, string result = "")
         {
@@ -142,5 +142,11 @@ namespace ATTP.Controllers
             return true;
         }
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            _unitOfWork.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

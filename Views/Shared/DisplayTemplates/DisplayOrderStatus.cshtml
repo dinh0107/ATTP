@@ -1,0 +1,16 @@
+﻿@if (Model == 0)
+{
+    <label class="badge badge-warning">Chờ xử lý</label>
+}
+else if (Model == 1)
+{
+    <label class="badge badge-info">Đang giao hàng</label>
+}
+else if (Model == 2)
+{
+    <label class="badge badge-success">Hoàn tất</label>
+}
+else if (Model == 3)
+{
+    <label class="badge badge-danger">Hủy</label>
+}

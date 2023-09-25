@@ -3,7 +3,6 @@ using ATTP.Models;
 using ATTP.ViewModel;
 using Helpers;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -19,7 +18,6 @@ namespace ATTP.Controllers
         private string Username => RouteData.Values["Username"].ToString();
         private string Email => RouteData.Values["Email"].ToString();
         private new User User => _unitOfWork.UserRepository.Get(a => (a.Email == Email || a.Username == Username)).SingleOrDefault();
-
 
         [ChildActionOnly]
         public PartialViewResult UserNav()

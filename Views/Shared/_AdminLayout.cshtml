@@ -77,7 +77,8 @@
                         <a class="root"><i class="fal fa-shopping-basket icon"></i><span>Quản lý Đơn hàng</span><i class="fas fa-caret-down"></i></a>
                         <div class="sub hidden">
                             <div><a href="@Url.Action("ListOrder", "Order")" class="text_link">Tất cả Đơn hàng</a></div>
-                            <div><a href="@Url.Action("ReportProduct", "Order")" class="text_link">Thống kê theo sản phẩm</a></div>
+                            <div><a href="@Url.Action("ReportOrder", "Order")" class="text_link">Thống kê đơn hàng</a></div>
+                            <div><a href="@Url.Action("ReportProduct", "Order")" class="text_link">Thống kê sản phẩm</a></div>
                         </div>
                     </li>
                     <li data-id="6">
@@ -92,7 +93,7 @@
                             <div>@Html.ActionLink("Danh mục sản phẩm", "ProductCategory", "ProductVcms", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Thêm mới sản phẩm", "Product", "ProductVcms", null, new { @class = "text_link" })</div>
                             <div>@Html.ActionLink("Danh sách sản phẩm", "ListProduct", "ProductVcms", null, new { @class = "text_link" })</div>
-                            <div>@Html.ActionLink("Thêm mới chất liệu", "Property", "ProductVcms", null, new { @class = "text_link" })</div>
+                            @*<div>@Html.ActionLink("Thêm mới chất liệu", "Property", "ProductVcms", null, new { @class = "text_link" })</div>*@
                         </div>
                     </li>
                     <li data-id="3">

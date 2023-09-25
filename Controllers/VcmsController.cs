@@ -1,14 +1,14 @@
-﻿using Helpers;
+﻿using ATTP.DAL;
+using ATTP.Models;
+using ATTP.ViewModel;
+using Helpers;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using System.Drawing;
-using ATTP.DAL;
-using ATTP.Models;
-using ATTP.ViewModel;
 
 namespace ATTP.Controllers
 {

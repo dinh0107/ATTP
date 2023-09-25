@@ -1,13 +1,13 @@
 ﻿@using PagedList.Mvc
-@model ATTP.ViewModel.ReportProductViewModel
+@model ATTP.ViewModel.ReportOrderViewModel
 @{
-    ViewBag.Title = "Thống kê sản phẩm";
+    ViewBag.Title = "Báo cáo đơn hàng";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Thống kê sản phẩm đã bán</h2>
+<h2>Báo cáo đơn hàng</h2>
 <div class="box_content mt-0">
-    @using (Html.BeginForm("ReportProduct", "Order", FormMethod.Get))
+    @using (Html.BeginForm("ReportOrder", "Order", FormMethod.Get))
     {
         <div class="form-group row">
             <div class="col-lg-3">
@@ -18,15 +18,15 @@
                 <label>Đến ngày</label>
                 @Html.TextBoxFor(a => a.ToDate, new { @class = "form_control datepicker", autocomplete = "off" })
             </div>
-            @*<div class="col-lg-3">
+            <div class="col-lg-3">
                 <label>Trạng thái</label>
                 <select name="status" class="form_control">
-                    <option value="0" @if (Model.Status == 0) { @Html.Raw("selected=selected") }>Đang xử lý</option>
+                    <option value="0" @if (Model.Status == 0) { @Html.Raw("selected=selected") }>Chờ xử lý</option>
                     <option value="1" @if (Model.Status == 1) { @Html.Raw("selected=selected") }>Đang giao hàng</option>
                     <option value="2" @if (Model.Status == 2) { @Html.Raw("selected=selected") }>Hoàn tất</option>
                     <option value="3" @if (Model.Status == 3) { @Html.Raw("selected=selected") }>Hủy đơn</option>
                 </select>
-            </div>*@
+            </div>
             <div class="col-lg-3">
                 <label>Thành phố</label>
                 @Html.DropDownListFor(a => a.CityId, Model.CitySelectList, "Tất cả", new { @class = "form_control w300" })
@@ -39,42 +39,33 @@
             </div>
         </div>
     }
+    <p>Có tổng <strong>@Model.Orders.TotalItemCount</strong> đơn hàng. Tổng tiền <strong>@Model.TotalAmount.ToString("N0")đ</strong>.</p>
     <table class="table table-bordered">
         <thead class="bg-info">
             <tr>
-                <th style="width: 150px;">ID sản phẩm</th>
-                <th style="width: 50px;">Ảnh</th>
-                <th>Sản phẩm</th>
-                <th style="width: 150px;">Số lượng</th>
-                <th style="width: 150px;">Số lượng tồn</th>
+                <th style="width: 150px;">Ngày đặt</th>
+                <th style="width: 150px;">Mã đơn</th>
+                <th style="width: 150px;">Số tiền</th>
+                <th style="width: 150px;">Số lượng SP</th>
+                <th style="width: 150px;">Trạng thái</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ReportProductItems)
+            @foreach (var item in Model.Orders)
             {
-                var inStock = item.Product.Quantity - item.TotalSale;
                 <tr>
-                    <td>@item.Product.Id</td>
-                    <td>
-                        @if (item.Product.ListImage != null)
-                        {
-                            <img src="@Path.Combine("/images/products/", item.Product.ListImage.Split(',')[0])?w=50" alt=""/>
-                        }
-                        else
-                        {
-                            @:-
-                        }
-                    </td>
-                    <td>@item.Product.Name</td>
-                    <td>@item.TotalSale</td>
-                    <td>@inStock</td>
+                    <td>@item.CreateDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.MaDonHang</td>
+                    <td>@item.Total().ToString("N0")</td>
+                    <td>@item.OrderDetails.Sum(a => a.Quantity)</td>
+                    <td>@Html.DisplayFor(a => item.Status)</td>
                 </tr>
             }
         </tbody>
     </table>
-    @if (Model.ReportProductItems.PageCount > 1)
+    @if (Model.Orders.PageCount > 1)
     {
-        <div class="text-center">@Html.PagedListPager(Model.ReportProductItems, page => Url.Action("ReportProduct", new { page, fromDate = Model.FromDate, toDate = Model.ToDate }))</div>
+        <div class="text-center">@Html.PagedListPager(Model.Orders, page => Url.Action("ReportOrder", new { page, fromDate = Model.FromDate, toDate = Model.ToDate }))</div>
     }
 </div>
 

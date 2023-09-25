@@ -6,11 +6,9 @@ using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Validation;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ATTP.Controllers
@@ -194,7 +192,7 @@ namespace ATTP.Controllers
         #endregion
 
         #region Product  
-        public ActionResult ListProduct(int? page, string name, int? parentId, int catId = 0, int thirdId = 0, string sort = "date-desc", string result = "")
+        public ActionResult ListProduct(int? page, string name, int? type, int? parentId, int catId = 0, int thirdId = 0, string sort = "date-desc", string result = "")
         {
             ViewBag.Result = result;
             var pageNumber = page ?? 1;
@@ -215,6 +213,16 @@ namespace ATTP.Controllers
             if (!string.IsNullOrEmpty(name))
             {
                 products = products.Where(l => l.Name.Contains(name));
+            }
+
+            switch (type)
+            {
+                case 1:
+                    products = products.Where(l => l.Quantity > 0);
+                    break;
+                case 2:
+                    products = products.Where(a => a.Quantity == 0);
+                    break;
             }
 
             switch (sort)
@@ -250,6 +258,7 @@ namespace ATTP.Controllers
                 Name = name,
                 Sort = sort,
                 ThirdId = thirdId,
+                Type = type
             };
             if (parentId.HasValue)
             {
@@ -410,7 +419,6 @@ namespace ATTP.Controllers
             return true;
         }
         #endregion
-
 
         public JsonResult GetProductCategory(int? parentId)
         {
