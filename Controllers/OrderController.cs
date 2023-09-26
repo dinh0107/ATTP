@@ -1,9 +1,12 @@
 ﻿using ATTP.DAL;
 using ATTP.ViewModel;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using PagedList;
 using System;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -99,9 +102,9 @@ namespace ATTP.Controllers
             return PartialView(model);
         }
 
-        public ActionResult ReportProduct(int? page, int? cityId, string fromDate, string toDate, int? status = 2)
+        public ActionResult ReportProduct(int? page, string submit, int? cityId, string fromDate, string toDate, int? status = 2)
         {
-            var orderDetails = _unitOfWork.OrderDetailRepository.GetQuery(a => a.Order.Status == status);
+            var orderDetails = _unitOfWork.OrderDetailRepository.GetQuery(a => a.Order.Status == status, q => q.OrderByDescending(a => a.Id));
 
             //if (status.HasValue)
             //{
@@ -123,11 +126,63 @@ namespace ATTP.Controllers
                 orderDetails = orderDetails.Where(a => DbFunctions.TruncateTime(a.Order.CreateDate) <= DbFunctions.TruncateTime(td));
             }
 
-            var groups = orderDetails.GroupBy(a => new { a.Product }).Select(a => new ReportProductViewModel.ReportProductItem
+            if (submit == "export")
             {
-                TotalSale = a.Sum(c => c.Quantity),
-                Product = a.Key.Product
-            });
+                var dt = new DataTable();
+                dt.Columns.Add("STT");
+                dt.Columns.Add("Ngày đặt hàng");
+                dt.Columns.Add("Mã đơn hàng");
+                dt.Columns.Add("Mã SP");
+                dt.Columns.Add("Tên SP");
+                dt.Columns.Add("Số lượng");
+                dt.Columns.Add("Giá tiền");
+                dt.Columns.Add("Thành tiền");
+
+                var filename = $"thong-ke-san-pham.xlsx";
+                var i = 1;
+                foreach (var item in orderDetails)
+                {
+                    var totalItem = item.Quantity * item.Price;
+                    dt.Rows.Add(i, item.Order.CreateDate.ToString("dd/MM/yyyy HH:mm"), item.Order.MaDonHang, item.ProductId, item.Product.Name, item.Quantity, item.Quantity, totalItem?.ToString("N0"));
+                    i++;
+                }
+                using (var pck = new ExcelPackage())
+                {
+                    //Create the worksheet
+                    var ws = pck.Workbook.Worksheets.Add("Danh sách đơn hàng");
+
+                    //Load the datatable into the sheet, starting from cell A1. Print the column names on row 1
+                    ws.Cells["A1"].LoadFromDataTable(dt, true);
+
+                    //Format the header for column 1-8
+                    using (var rng = ws.Cells["A1:H1"])
+                    {
+                        rng.Style.Font.Bold = true;
+                        rng.Style.Fill.PatternType = ExcelFillStyle.Solid;                      //Set Pattern for the background to Solid
+                        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(79, 129, 189));  //Set color to dark blue
+                        rng.Style.Font.Color.SetColor(Color.White);
+                    }
+
+                    //Example how to Format Column 7 as numeric
+                    //using (var col = ws.Cells[2, 7, 2 + dt.Rows.Count, 7])
+                    //{
+                    //    col.Style.Numberformat.Format = "#,##0";
+                    //    col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    //}
+
+                    //Write it back to the client
+                    //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    //Response.AddHeader("content-disposition", "attachment;  filename=" + filename + "");
+                    //Response.BinaryWrite(pck.GetAsByteArray());
+
+                    return File(pck.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
+            }
+            //var groups = orderDetails.GroupBy(a => new { a.Product }).Select(a => new ReportProductViewModel.ReportProductItem
+            //{
+            //    TotalSale = a.Sum(c => c.Quantity),
+            //    Product = a.Key.Product
+            //});
 
             var pageNumber = page ?? 1;
 
@@ -138,7 +193,9 @@ namespace ATTP.Controllers
                 FromDate = fromDate,
                 ToDate = toDate,
                 Status = status,
-                ReportProductItems = groups.OrderBy(a => a.Product.Sort).ToPagedList(pageNumber, 50)
+                OrderDetails = orderDetails.ToPagedList(pageNumber, 50),
+                TotalAmount = orderDetails.Sum(c => c.Quantity * c.Price) ?? 0m
+                //ReportProductItems = groups.OrderBy(a => a.Product.Sort).ToPagedList(pageNumber, 50)
             };
 
             return View(model);

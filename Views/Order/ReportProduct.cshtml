@@ -19,14 +19,14 @@
                 @Html.TextBoxFor(a => a.ToDate, new { @class = "form_control datepicker", autocomplete = "off" })
             </div>
             @*<div class="col-lg-3">
-                <label>Trạng thái</label>
-                <select name="status" class="form_control">
-                    <option value="0" @if (Model.Status == 0) { @Html.Raw("selected=selected") }>Đang xử lý</option>
-                    <option value="1" @if (Model.Status == 1) { @Html.Raw("selected=selected") }>Đang giao hàng</option>
-                    <option value="2" @if (Model.Status == 2) { @Html.Raw("selected=selected") }>Hoàn tất</option>
-                    <option value="3" @if (Model.Status == 3) { @Html.Raw("selected=selected") }>Hủy đơn</option>
-                </select>
-            </div>*@
+                    <label>Trạng thái</label>
+                    <select name="status" class="form_control">
+                        <option value="0" @if (Model.Status == 0) { @Html.Raw("selected=selected") }>Đang xử lý</option>
+                        <option value="1" @if (Model.Status == 1) { @Html.Raw("selected=selected") }>Đang giao hàng</option>
+                        <option value="2" @if (Model.Status == 2) { @Html.Raw("selected=selected") }>Hoàn tất</option>
+                        <option value="3" @if (Model.Status == 3) { @Html.Raw("selected=selected") }>Hủy đơn</option>
+                    </select>
+                </div>*@
             <div class="col-lg-3">
                 <label>Thành phố</label>
                 @Html.DropDownListFor(a => a.CityId, Model.CitySelectList, "Tất cả", new { @class = "form_control w300" })
@@ -35,47 +35,80 @@
         <div class="form-group row">
             <div class="col-lg-3 align-self-center">
                 <button type="submit" class="btn-search">Tìm kiếm</button>
-                @*<a href="@Url.Action("ExportReportProduct", new{fromDate = Model.FromDate, toDate = Model.ToDate, status = Model.Status, cityId = Model.CityId})" class="btn-search">Xuất File</a>*@
+                <button type="submit" class="btn-search" name="submit" value="export">Xuất File</button>
             </div>
         </div>
     }
+    <p>Tổng doanh số <strong>@Model.TotalAmount.ToString("N0")</strong></p>
     <table class="table table-bordered">
         <thead class="bg-info">
             <tr>
-                <th style="width: 150px;">ID sản phẩm</th>
-                <th style="width: 50px;">Ảnh</th>
-                <th>Sản phẩm</th>
+                <th style="width: 150px;">Ngày bán</th>
+                <th style="width: 50px;">Mã đơn hàng</th>
+                <th>Mã Sản phẩm</th>
+                <th>Tên sản phẩm</th>
                 <th style="width: 150px;">Số lượng</th>
-                <th style="width: 150px;">Số lượng tồn</th>
+                <th style="width: 150px;">Giá tiền</th>
+                <th style="width: 150px;">Thành tiền</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ReportProductItems)
+            @foreach (var item in Model.OrderDetails)
             {
-                var inStock = item.Product.Quantity - item.TotalSale;
+                var totalItem = item.Quantity * item.Price;
                 <tr>
+                    <td>@item.Order.CreateDate.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Order.MaDonHang</td>
                     <td>@item.Product.Id</td>
-                    <td>
-                        @if (item.Product.ListImage != null)
-                        {
-                            <img src="@Path.Combine("/images/products/", item.Product.ListImage.Split(',')[0])?w=50" alt=""/>
-                        }
-                        else
-                        {
-                            @:-
-                        }
-                    </td>
                     <td>@item.Product.Name</td>
-                    <td>@item.TotalSale</td>
-                    <td>@inStock</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Price?.ToString("N0"))</td>
+                    <td>@(totalItem?.ToString("N0"))</td>
                 </tr>
             }
         </tbody>
     </table>
-    @if (Model.ReportProductItems.PageCount > 1)
+    @if (Model.OrderDetails.PageCount > 1)
     {
-        <div class="text-center">@Html.PagedListPager(Model.ReportProductItems, page => Url.Action("ReportProduct", new { page, fromDate = Model.FromDate, toDate = Model.ToDate }))</div>
+        <div class="text-center">@Html.PagedListPager(Model.OrderDetails, page => Url.Action("ReportProduct", new { page, fromDate = Model.FromDate, toDate = Model.ToDate }))</div>
     }
+    @*<table class="table table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th style="width: 150px;">ID sản phẩm</th>
+                        <th style="width: 50px;">Ảnh</th>
+                        <th>Sản phẩm</th>
+                        <th style="width: 150px;">Số lượng</th>
+                        <th style="width: 150px;">Số lượng tồn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ReportProductItems)
+                    {
+                        var inStock = item.Product.Quantity - item.TotalSale;
+                        <tr>
+                            <td>@item.Product.Id</td>
+                            <td>
+                                @if (item.Product.ListImage != null)
+                                {
+                                    <img src="@Path.Combine("/images/products/", item.Product.ListImage.Split(',')[0])?w=50" alt=""/>
+                                }
+                                else
+                                {
+                                    @:-
+                                }
+                            </td>
+                            <td>@item.Product.Name</td>
+                            <td>@item.TotalSale</td>
+                            <td>@inStock</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        @if (Model.ReportProductItems.PageCount > 1)
+        {
+            <div class="text-center">@Html.PagedListPager(Model.ReportProductItems, page => Url.Action("ReportProduct", new { page, fromDate = Model.FromDate, toDate = Model.ToDate }))</div>
+        }*@
 </div>
 
 @section scripts

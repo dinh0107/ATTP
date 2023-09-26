@@ -64,6 +64,9 @@ namespace ATTP.ViewModel
         public string FromDate { get; set; }
         public string ToDate { get; set; }
         public int? Status { get; set; }
+        public decimal TotalAmount { get; set; }
+        public IPagedList<OrderDetail> OrderDetails { get; set; }
+
         public IPagedList<ReportProductItem> ReportProductItems { get; set; }
         public int? CityId { get; set; }
         public SelectList CitySelectList { get; set; }
