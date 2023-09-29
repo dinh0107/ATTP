@@ -35,7 +35,7 @@
         <div class="form-group row">
             <div class="col-lg-3 align-self-center">
                 <button type="submit" class="btn-search">Tìm kiếm</button>
-                @*<a href="@Url.Action("ExportReportProduct", new{fromDate = Model.FromDate, toDate = Model.ToDate, status = Model.Status, cityId = Model.CityId})" class="btn-search">Xuất File</a>*@
+                <button type="submit" name="submit" value="export" class="btn-search">Xuất EXCEL</button>
             </div>
         </div>
     }

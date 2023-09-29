@@ -201,7 +201,7 @@ namespace ATTP.Controllers
             return View(model);
         }
 
-        public ActionResult ReportOrder(int? page, int? cityId, string fromDate, string toDate, int? status = 2)
+        public ActionResult ReportOrder(int? page, string submit, int? cityId, string fromDate, string toDate, int? status = 2)
         {
             var orders = _unitOfWork.OrderRepository.GetQuery(a => a.Status == status, q => q.OrderByDescending(a => a.Id));
 
@@ -221,6 +221,71 @@ namespace ATTP.Controllers
             if (DateTime.TryParse(toDate, new CultureInfo("vi-VN"), DateTimeStyles.None, out var td))
             {
                 orders = orders.Where(a => DbFunctions.TruncateTime(a.CreateDate) <= DbFunctions.TruncateTime(td));
+            }
+            if (submit == "export")
+            {
+                var dt = new DataTable();
+                dt.Columns.Add("STT");
+                dt.Columns.Add("Ngày đặt hàng");
+                dt.Columns.Add("Mã đơn hàng");
+                dt.Columns.Add("Số tiền");
+                dt.Columns.Add("Số lượng");
+                dt.Columns.Add("Trạng thái");
+
+                var filename = $"thong-ke-san-pham.xlsx";
+                var i = 1;
+                foreach (var item in orders)
+                {
+                    string statusName;
+                    switch (item.Status)
+                    {
+                        case 1:
+                            statusName = "Đang giao hàng";
+                            break;
+                        case 2:
+                            statusName = "Hoàn tất";
+                            break;
+                        case 3:
+                            statusName = "Hủy đơn";
+                            break;
+                        default:
+                            statusName = "Chờ xử lý";
+                            break;
+                    }
+                    dt.Rows.Add(i, item.CreateDate.ToString("dd/MM/yyyy HH:mm"), item.MaDonHang, item.Total(), item.OrderDetails.Sum(c => c.Quantity), statusName);
+                    i++;
+                }
+                using (var pck = new ExcelPackage())
+                {
+                    //Create the worksheet
+                    var ws = pck.Workbook.Worksheets.Add("Danh sách đơn hàng");
+
+                    //Load the datatable into the sheet, starting from cell A1. Print the column names on row 1
+                    ws.Cells["A1"].LoadFromDataTable(dt, true);
+
+                    //Format the header for column 1-8
+                    using (var rng = ws.Cells["A1:F1"])
+                    {
+                        rng.Style.Font.Bold = true;
+                        rng.Style.Fill.PatternType = ExcelFillStyle.Solid;                      //Set Pattern for the background to Solid
+                        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(79, 129, 189));  //Set color to dark blue
+                        rng.Style.Font.Color.SetColor(Color.White);
+                    }
+
+                    //Example how to Format Column 7 as numeric
+                    //using (var col = ws.Cells[2, 7, 2 + dt.Rows.Count, 7])
+                    //{
+                    //    col.Style.Numberformat.Format = "#,##0";
+                    //    col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    //}
+
+                    //Write it back to the client
+                    //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    //Response.AddHeader("content-disposition", "attachment;  filename=" + filename + "");
+                    //Response.BinaryWrite(pck.GetAsByteArray());
+
+                    return File(pck.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
+                }
             }
 
             var pageNumber = page ?? 1;
