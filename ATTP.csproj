@@ -428,7 +428,7 @@
     <Content Include="Scripts\ckeditor\CHANGES.md" />
     <Content Include="Scripts\ckeditor\LICENSE.md" />
     <Content Include="Scripts\ckeditor\README.md" />
-    <None Include="Properties\PublishProfiles\antoanthucphamhanoi.vn 31.12.pubxml" />
+    <None Include="Properties\PublishProfiles\antoanthucphamhanoi.com.vn 31.12.pubxml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\isotope.pkgd.min.js" />
     <None Include="Scripts\jquery-3.6.1.intellisense.js" />
