@@ -272,6 +272,7 @@ namespace ATTP.Controllers
                 config.NumberBank = model.NumberBank;
                 config.Zalo = model.Zalo;
                 config.Hethong = model.Hethong;
+                config.LinkYoutube = model.LinkYoutube;
                 //config.LinkMap = model.LinkMap;
                 //config.AboutProduct = model.AboutProduct;
                 //config.Feedback = model.Feedback;

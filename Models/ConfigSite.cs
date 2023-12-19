@@ -77,5 +77,8 @@ namespace ATTP.Models
         public string UseBank { get; set; }
         [Display(Name = "Số tài khoản"), StringLength(200, ErrorMessage = "Tối đa 200 ký tự"), UIHint("TextBox")]
         public string NumberBank { get; set; }
+        [StringLength(500, ErrorMessage = "Tối đa 500 ký tự"), Display(Name = "Đường dẫn video youtube"),
+        Url(ErrorMessage = "Đường dẫn không chính xác"), UIHint("TextBox")]
+        public string LinkYoutube { get; set; }
     }
 }
