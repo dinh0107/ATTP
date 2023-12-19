@@ -299,9 +299,19 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                @if (config.AboutImage != null)
+                @if (config.LinkYoutube == null)
                 {
-                    <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/configs/", config.AboutImage)" alt="@config.Title" class="lazyload" />
+                    if (config.AboutImage != null)
+                    {
+                        <img src="~/Content/images/img-main/base64.gif" data-src="@Path.Combine("/images/configs/", config.AboutImage)" alt="@config.Title" class="lazyload" />
+                    }
+                }
+                else
+                {
+                    string url = config.LinkYoutube;
+                    string videoId = System.Text.RegularExpressions.Regex.Match(url, "(?<=v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v=|\\?v=|\\/vi\\/|\\/e\\/|watch\\?v=|\\/v\\/|\\?v=)([^#\\&\\?\\n]*)(?:#|\\&|\\?|\\n|$)").Value;
+                    string iframeSrc = $"https://www.youtube.com/embed/{videoId}";
+                    <iframe src="@iframeSrc" class="youtube-video" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 }
             </div>
         </div>
