@@ -207,7 +207,10 @@ input {
 .chevron-prev {
     left: 0;
 }
-
+.youtube-video {
+    width: 100%;
+    aspect-ratio: 16/9;
+}
 header {
     position: sticky;
     top: 0;

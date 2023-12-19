@@ -193,6 +193,10 @@
     <Compile Include="Migrations\202309090124577_update-article.designer.cs">
       <DependentUpon>202309090124577_update-article.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202312190135259_youtube.cs" />
+    <Compile Include="Migrations\202312190135259_youtube.designer.cs">
+      <DependentUpon>202312190135259_youtube.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Admin.cs" />
@@ -721,6 +725,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202309090124577_update-article.resx">
       <DependentUpon>202309090124577_update-article.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202312190135259_youtube.resx">
+      <DependentUpon>202312190135259_youtube.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
